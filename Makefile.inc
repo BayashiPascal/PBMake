@@ -130,6 +130,7 @@ $(repo)_LINK_ARG:=-lm
 # Shared .o
 $(repo).o: \
 		$($(repo)_DIR)/$(repo).c \
+		$($(repo)_DIR)/$(repo)-inline.c \
 		$($(repo)_INC_H) \
 		$($(repo)_DEP)
 	$(COMPILER) $(BUILD_ARG) $($(basename $@)_INC_DIR) -c $($(basename $@)_DIR)/$(basename $@).c
@@ -176,6 +177,7 @@ $(repo)_LINK_ARG:=
 # Shared .o
 $(repo).o: \
 		$($(repo)_DIR)/$(repo).c \
+		$($(repo)_DIR)/$(repo)-inline.c \
 		$($(repo)_INC_H) \
 		$($(repo)_DEP)
 	$(COMPILER) $(BUILD_ARG) $($(basename $@)_INC_DIR) -c $($(basename $@)_DIR)/$(basename $@).c
@@ -222,6 +224,7 @@ $(repo)_LINK_ARG:=
 # Shared .o
 $(repo).o: \
 		$($(repo)_DIR)/$(repo).c \
+		$($(repo)_DIR)/$(repo)-inline.c \
 		$($(repo)_INC_H) \
 		$($(repo)_DEP)
 	$(COMPILER) $(BUILD_ARG) $($(basename $@)_INC_DIR) -c $($(basename $@)_DIR)/$(basename $@).c
@@ -268,6 +271,7 @@ $(repo)_LINK_ARG:=-lm
 # Shared .o
 $(repo).o: \
 		$($(repo)_DIR)/$(repo).c \
+		$($(repo)_DIR)/$(repo)-inline.c \
 		$($(repo)_INC_H) \
 		$($(repo)_DEP)
 	$(COMPILER) $(BUILD_ARG) $($(basename $@)_INC_DIR) -c $($(basename $@)_DIR)/$(basename $@).c
@@ -321,6 +325,7 @@ $(repo)_LINK_ARG:=-lm
 # Shared .o
 $(repo).o: \
 		$($(repo)_DIR)/$(repo).c \
+		$($(repo)_DIR)/$(repo)-inline.c \
 		$($(repo)_INC_H) \
 		$($(repo)_DEP)
 	$(COMPILER) $(BUILD_ARG) $($(basename $@)_INC_DIR) -c $($(basename $@)_DIR)/$(basename $@).c
@@ -370,6 +375,7 @@ $(repo)_LINK_ARG:=-lm
 # Shared .o
 $(repo).o: \
 		$($(repo)_DIR)/$(repo).c \
+		$($(repo)_DIR)/$(repo)-inline.c \
 		$($(repo)_INC_H) \
 		$($(repo)_DEP)
 	$(COMPILER) $(BUILD_ARG) $($(basename $@)_INC_DIR) -c $($(basename $@)_DIR)/$(basename $@).c
@@ -416,6 +422,7 @@ $(repo)_LINK_ARG:=-lm
 # Shared .o
 $(repo).o: \
 		$($(repo)_DIR)/$(repo).c \
+		$($(repo)_DIR)/$(repo)-inline.c \
 		$($(repo)_INC_H) \
 		$($(repo)_DEP)
 	$(COMPILER) $(BUILD_ARG) $($(basename $@)_INC_DIR) -c $($(basename $@)_DIR)/$(basename $@).c
@@ -465,6 +472,7 @@ $(repo)_LINK_ARG:=-lm
 # Shared .o
 $(repo).o: \
 		$($(repo)_DIR)/$(repo).c \
+		$($(repo)_DIR)/$(repo)-inline.c \
 		$($(repo)_INC_H) \
 		$($(repo)_DEP)
 	$(COMPILER) $(BUILD_ARG) $($(basename $@)_INC_DIR) -c $($(basename $@)_DIR)/$(basename $@).c
@@ -511,6 +519,7 @@ $(repo)_LINK_ARG:=-lm
 # Shared .o
 $(repo).o: \
 		$($(repo)_DIR)/$(repo).c \
+		$($(repo)_DIR)/$(repo)-inline.c \
 		$($(repo)_INC_H) \
 		$($(repo)_DEP)
 	$(COMPILER) $(BUILD_ARG) $($(basename $@)_INC_DIR) -c $($(basename $@)_DIR)/$(basename $@).c
@@ -560,6 +569,7 @@ $(repo)_LINK_ARG:=-lm
 # Shared .o
 $(repo).o: \
 		$($(repo)_DIR)/$(repo).c \
+		$($(repo)_DIR)/$(repo)-inline.c \
 		$($(repo)_INC_H) \
 		$($(repo)_DEP)
 	$(COMPILER) $(BUILD_ARG) $($(basename $@)_INC_DIR) -c $($(basename $@)_DIR)/$(basename $@).c
@@ -609,6 +619,7 @@ $(repo)_LINK_ARG:=-lm
 # Shared .o
 $(repo).o: \
 		$($(repo)_DIR)/$(repo).c \
+		$($(repo)_DIR)/$(repo)-inline.c \
 		$($(repo)_INC_H) \
 		$($(repo)_DEP)
 	$(COMPILER) $(BUILD_ARG) $($(basename $@)_INC_DIR) -c $($(basename $@)_DIR)/$(basename $@).c
@@ -661,6 +672,7 @@ $(repo)_LINK_ARG:=-lm
 # Shared .o
 $(repo).o: \
 		$($(repo)_DIR)/$(repo).c \
+		$($(repo)_DIR)/$(repo)-inline.c \
 		$($(repo)_INC_H) \
 		$($(repo)_DEP)
 	$(COMPILER) $(BUILD_ARG) $($(basename $@)_INC_DIR) -c $($(basename $@)_DIR)/$(basename $@).c
@@ -718,6 +730,7 @@ $(repo)_LINK_ARG:=-lm
 # Shared .o
 $(repo).o: \
 		$($(repo)_DIR)/$(repo).c \
+		$($(repo)_DIR)/$(repo)-inline.c \
 		$($(repo)_INC_H) \
 		$($(repo)_DEP)
 	$(COMPILER) $(BUILD_ARG) $($(basename $@)_INC_DIR) -c $($(basename $@)_DIR)/$(basename $@).c
@@ -732,7 +745,8 @@ $(repo)_EXENAME:=main
 $(repo)_DIR:=$(ROOT_DIR)/$($(repo)_NAME)
 # Header of the shared .o
 $(repo)_H:= \
-	$($(repo)_DIR)/$(repo).h
+	$($(repo)_DIR)/$(repo).h \
+	$($(repo)_DIR)/$(repo)-GTK.h
 # List of header includes for the repository
 $(repo)_INC_H:= \
 	$($(repo)_H) \
@@ -779,6 +793,9 @@ $(repo)_LINK_ARG:=-lm $(GTKLINK) $(CAIROLINK)
 # Shared .o
 $(repo).o: \
 		$($(repo)_DIR)/$(repo).c \
+		$($(repo)_DIR)/$(repo)-inline.c \
+		$($(repo)_DIR)/$(repo)-GTK.c \
+		$($(repo)_DIR)/$(repo)-inline-GTK.c \
 		$($(repo)_INC_H) \
 		$($(repo)_DEP)
 	$(COMPILER) $(BUILD_ARG) $($(basename $@)_INC_DIR) -c $($(basename $@)_DIR)/$(basename $@).c
