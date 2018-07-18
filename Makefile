@@ -24,6 +24,7 @@ LIST_REPOS=\
 	NeuraNet \
 	FracNoise \
 	GenBrush \
+	MiniFrame \
 	
 
 all: 
