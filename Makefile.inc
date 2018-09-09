@@ -5,7 +5,7 @@ catch_makefile_inc:
 
 # Root dir of the repositories
 
-ROOT_DIR=/home/bayashi/Coding
+ROOT_DIR=/home/bayashi/GitHub
 
 # Compiler arguments depending on BUILD_MODE
 
