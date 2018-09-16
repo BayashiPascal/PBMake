@@ -811,7 +811,6 @@ $(repo)_DIR:=$(ROOT_DIR)/$($(repo)_NAME)
 # Header of the shared .o
 $(repo)_H:= \
 	$($(repo)_DIR)/$(repo).h \
-	$($(repo)_DIR)/$(repo)-model.h
 # List of header includes for the repository
 $(repo)_INC_H:= \
 	$($(repo)_H) \
@@ -846,7 +845,6 @@ $(repo)_LINK_ARG:=-lm
 # Shared .o
 $(repo).o: \
 		$($(repo)_DIR)/$(repo).c \
-		$($(repo)_DIR)/$(repo)-model.c \
 		$($(repo)_INC_H) \
 		$($(repo)_DEP)
 	$(COMPILER) $(BUILD_ARG) $($(basename $@)_INC_DIR) -c $($(basename $@)_DIR)/$(basename $@).c
