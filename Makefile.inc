@@ -42,6 +42,40 @@ valgrind :
 	valgrind -v --track-origins=yes --leak-check=full \
 	--gen-suppressions=yes --show-leak-kinds=all ./main
 
+# Definition of Wget rules
+pberr_wget:
+	if [ ! -d $(ROOT_DIR)/PBErr ]; then wget https://github.com/BayashiPascal/PBErr/archive/master.zip; unzip master.zip; rm -f master.zip; mv PBErr-master $(ROOT_DIR)/PBErr; fi
+gset_wget:
+	if [ ! -d $(ROOT_DIR)/GSet ]; then wget https://github.com/BayashiPascal/GSet/archive/master.zip; unzip master.zip; rm -f master.zip; mv GSet-master $(ROOT_DIR)/GSet; fi
+gtree_wget:
+	if [ ! -d $(ROOT_DIR)/GTree ]; then wget https://github.com/BayashiPascal/GTree/archive/master.zip; unzip master.zip; rm -f master.zip; mv GTree-master $(ROOT_DIR)/GTree; fi
+pbjson_wget:
+	if [ ! -d $(ROOT_DIR)/PBJson ]; then wget https://github.com/BayashiPascal/PBJson/archive/master.zip; unzip master.zip; rm -f master.zip; mv PBJson-master $(ROOT_DIR)/PBJson; fi
+pbmath_wget:
+	if [ ! -d $(ROOT_DIR)/PBMath ]; then wget https://github.com/BayashiPascal/PBMath/archive/master.zip; unzip master.zip; rm -f master.zip; mv PBMath-master $(ROOT_DIR)/PBMath; fi
+bcurve_wget:
+	if [ ! -d $(ROOT_DIR)/BCurve ]; then wget https://github.com/BayashiPascal/BCurve/archive/master.zip; unzip master.zip; rm -f master.zip; mv BCurve-master $(ROOT_DIR)/BCurve; fi
+shapoid_wget:
+	if [ ! -d $(ROOT_DIR)/Shapoid ]; then wget https://github.com/BayashiPascal/Shapoid/archive/master.zip; unzip master.zip; rm -f master.zip; mv Shapoid-master $(ROOT_DIR)/Shapoid; fi
+pbphys_wget:
+	if [ ! -d $(ROOT_DIR)/PBPhys ]; then wget https://github.com/BayashiPascal/PBPhys/archive/master.zip; unzip master.zip; rm -f master.zip; mv PBPhys-master $(ROOT_DIR)/PBPhys; fi
+grad_wget:
+	if [ ! -d $(ROOT_DIR)/Grad ]; then wget https://github.com/BayashiPascal/Grad/archive/master.zip; unzip master.zip; rm -f master.zip; mv Grad-master $(ROOT_DIR)/Grad; fi
+knapsack_wget:
+	if [ ! -d $(ROOT_DIR)/KnapSack ]; then wget https://github.com/BayashiPascal/KnapSack/archive/master.zip; unzip master.zip; rm -f master.zip; mv KnapSack-master $(ROOT_DIR)/KnapSack; fi
+elorank_wget:
+	if [ ! -d $(ROOT_DIR)/ELORank ]; then wget https://github.com/BayashiPascal/ELORank/archive/master.zip; unzip master.zip; rm -f master.zip; mv ELORank-master $(ROOT_DIR)/ELORank; fi
+genalg_wget:
+	if [ ! -d $(ROOT_DIR)/GenAlg ]; then wget https://github.com/BayashiPascal/GenAlg/archive/master.zip; unzip master.zip; rm -f master.zip; mv GenAlg-master $(ROOT_DIR)/GenAlg; fi
+neuranet_wget:
+	if [ ! -d $(ROOT_DIR)/NeuraNet ]; then wget https://github.com/BayashiPascal/NeuraNet/archive/master.zip; unzip master.zip; rm -f master.zip; mv NeuraNet-master $(ROOT_DIR)/NeuraNet; fi
+fracnoise_wget:
+	if [ ! -d $(ROOT_DIR)/FracNoise ]; then wget https://github.com/BayashiPascal/FracNoise/archive/master.zip; unzip master.zip; rm -f master.zip; mv FracNoise-master $(ROOT_DIR)/FracNoise; fi
+genbrush_wget:
+	if [ ! -d $(ROOT_DIR)/GenBrush ]; then wget https://github.com/BayashiPascal/GenBrush/archive/master.zip; unzip master.zip; rm -f master.zip; mv GenBrush-master $(ROOT_DIR)/GenBrush; fi
+miniframe_wget:
+	if [ ! -d $(ROOT_DIR)/MiniFrame ]; then wget https://github.com/BayashiPascal/MiniFrame/archive/master.zip; unzip master.zip; rm -f master.zip; mv MiniFrame-master $(ROOT_DIR)/MiniFrame; fi
+
 # Definition of rules for each repository
 
 # ---- PBErr
@@ -54,6 +88,7 @@ $(repo)_EXENAME:=main
 $(repo)_DIR:=$(ROOT_DIR)/$($(repo)_NAME)
 # Header of the shared .o
 $(repo)_H:= \
+	$(repo)_wget \
 	$($(repo)_DIR)/$(repo).h
 # List of header includes for the repository
 $(repo)_INC_H:= \
@@ -94,6 +129,7 @@ $(repo)_EXENAME:=main
 $(repo)_DIR:=$(ROOT_DIR)/$($(repo)_NAME)
 # Header of the shared .o
 $(repo)_H:= \
+	$(repo)_wget \
 	$($(repo)_DIR)/$(repo).h
 # List of header includes for the repository
 $(repo)_INC_H:= \
@@ -145,6 +181,7 @@ $(repo)_EXENAME:=main
 $(repo)_DIR:=$(ROOT_DIR)/$($(repo)_NAME)
 # Header of the shared .o
 $(repo)_H:= \
+	$(repo)_wget \
 	$($(repo)_DIR)/$(repo).h
 # List of header includes for the repository
 $(repo)_INC_H:= \
@@ -192,6 +229,7 @@ $(repo)_EXENAME:=main
 $(repo)_DIR:=$(ROOT_DIR)/$($(repo)_NAME)
 # Header of the shared .o
 $(repo)_H:= \
+	$(repo)_wget \
 	$($(repo)_DIR)/$(repo).h
 # List of header includes for the repository
 $(repo)_INC_H:= \
@@ -239,6 +277,7 @@ $(repo)_EXENAME:=main
 $(repo)_DIR:=$(ROOT_DIR)/$($(repo)_NAME)
 # Header of the shared .o
 $(repo)_H:= \
+	$(repo)_wget \
 	$($(repo)_DIR)/$(repo).h
 # List of header includes for the repository
 $(repo)_INC_H:= \
@@ -286,6 +325,7 @@ $(repo)_EXENAME:=main
 $(repo)_DIR:=$(ROOT_DIR)/$($(repo)_NAME)
 # Header of the shared .o
 $(repo)_H:= \
+	$(repo)_wget \
 	$($(repo)_DIR)/$(repo).h
 # List of header includes for the repository
 $(repo)_INC_H:= \
@@ -340,6 +380,7 @@ $(repo)_EXENAME:=main
 $(repo)_DIR:=$(ROOT_DIR)/$($(repo)_NAME)
 # Header of the shared .o
 $(repo)_H:= \
+	$(repo)_wget \
 	$($(repo)_DIR)/$(repo).h
 # List of header includes for the repository
 $(repo)_INC_H:= \
@@ -390,6 +431,7 @@ $(repo)_EXENAME:=main
 $(repo)_DIR:=$(ROOT_DIR)/$($(repo)_NAME)
 # Header of the shared .o
 $(repo)_H:= \
+	$(repo)_wget \
 	$($(repo)_DIR)/$(repo).h
 # List of header includes for the repository
 $(repo)_INC_H:= \
@@ -437,6 +479,7 @@ $(repo)_EXENAME:=main
 $(repo)_DIR:=$(ROOT_DIR)/$($(repo)_NAME)
 # Header of the shared .o
 $(repo)_H:= \
+	$(repo)_wget \
 	$($(repo)_DIR)/$(repo).h
 # List of header includes for the repository
 $(repo)_INC_H:= \
@@ -487,6 +530,7 @@ $(repo)_EXENAME:=main
 $(repo)_DIR:=$(ROOT_DIR)/$($(repo)_NAME)
 # Header of the shared .o
 $(repo)_H:= \
+	$(repo)_wget \
 	$($(repo)_DIR)/$(repo).h
 # List of header includes for the repository
 $(repo)_INC_H:= \
@@ -534,6 +578,7 @@ $(repo)_EXENAME:=main
 $(repo)_DIR:=$(ROOT_DIR)/$($(repo)_NAME)
 # Header of the shared .o
 $(repo)_H:= \
+	$(repo)_wget \
 	$($(repo)_DIR)/$(repo).h
 # List of header includes for the repository
 $(repo)_INC_H:= \
@@ -584,6 +629,7 @@ $(repo)_EXENAME:=main
 $(repo)_DIR:=$(ROOT_DIR)/$($(repo)_NAME)
 # Header of the shared .o
 $(repo)_H:= \
+	$(repo)_wget \
 	$($(repo)_DIR)/$(repo).h
 # List of header includes for the repository
 $(repo)_INC_H:= \
@@ -634,6 +680,7 @@ $(repo)_EXENAME:=main
 $(repo)_DIR:=$(ROOT_DIR)/$($(repo)_NAME)
 # Header of the shared .o
 $(repo)_H:= \
+	$(repo)_wget \
 	$($(repo)_DIR)/$(repo).h
 # List of header includes for the repository
 $(repo)_INC_H:= \
@@ -687,6 +734,7 @@ $(repo)_EXENAME:=main
 $(repo)_DIR:=$(ROOT_DIR)/$($(repo)_NAME)
 # Header of the shared .o
 $(repo)_H:= \
+	$(repo)_wget \
 	$($(repo)_DIR)/$(repo).h
 # List of header includes for the repository
 $(repo)_INC_H:= \
@@ -745,6 +793,7 @@ $(repo)_EXENAME:=main
 $(repo)_DIR:=$(ROOT_DIR)/$($(repo)_NAME)
 # Header of the shared .o
 $(repo)_H:= \
+	$(repo)_wget \
 	$($(repo)_DIR)/$(repo).h \
 	$($(repo)_DIR)/$(repo)-GTK.h
 # List of header includes for the repository
@@ -810,6 +859,7 @@ $(repo)_EXENAME:=main
 $(repo)_DIR:=$(ROOT_DIR)/$($(repo)_NAME)
 # Header of the shared .o
 $(repo)_H:= \
+	$(repo)_wget \
 	$($(repo)_DIR)/$(repo).h \
 # List of header includes for the repository
 $(repo)_INC_H:= \
