@@ -25,6 +25,7 @@ LIST_REPOS=\
 	FracNoise \
 	GenBrush \
 	MiniFrame \
+	PixelToPosEstimator \
 	
 
 all: 
