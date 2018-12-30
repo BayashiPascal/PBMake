@@ -42,6 +42,11 @@ valgrind :
 	valgrind -v --track-origins=yes --leak-check=full \
 	--gen-suppressions=yes --show-leak-kinds=all ./main
 
+# Make the documentation
+
+latex:
+	cd Doc; pdflatex -synctex=1 -interaction=nonstopmode -shell-escape  doc.tex; cd ..
+
 # Definition of Wget rules
 pberr_wget:
 	if [ ! -d $(ROOT_DIR)/PBErr ]; then wget https://github.com/BayashiPascal/PBErr/archive/master.zip; unzip master.zip; rm -f master.zip; mv PBErr-master $(ROOT_DIR)/PBErr; fi
