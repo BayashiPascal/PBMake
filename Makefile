@@ -26,6 +26,7 @@ LIST_REPOS=\
 	GenBrush \
 	MiniFrame \
 	PixelToPosEstimator \
+	PBDataAnalysis \
 	
 
 all: 
