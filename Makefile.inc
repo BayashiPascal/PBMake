@@ -1007,6 +1007,7 @@ $(repo)_LINK_ARG:=-lm
 # Shared .o
 $(repo).o: \
 		$($(repo)_DIR)/$(repo).c \
+		$($(repo)_DIR)/$(repo)-inline.c \
 		$($(repo)_INC_H) \
 		$($(repo)_DEP)
 	$(COMPILER) $(BUILD_ARG) $($(basename $@)_INC_DIR) -c $($(basename $@)_DIR)/$(basename $@).c
