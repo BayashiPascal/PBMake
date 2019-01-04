@@ -84,6 +84,8 @@ pixeltoposestimator_wget:
 	if [ ! -d $(ROOT_DIR)/PixelToPosEstimator ]; then wget https://github.com/BayashiPascal/PixelToPosEstimator/archive/master.zip; unzip master.zip; rm -f master.zip; mv PixelToPosEstimator-master $(ROOT_DIR)/PixelToPosEstimator; fi
 pbdataanalysis_wget:
 	if [ ! -d $(ROOT_DIR)/PBDataAnalysis ]; then wget https://github.com/BayashiPascal/PBDataAnalysis/archive/master.zip; unzip master.zip; rm -f master.zip; mv PBDataAnalysis-master $(ROOT_DIR)/PBDataAnalysis; fi
+pbimganalysis_wget:
+	if [ ! -d $(ROOT_DIR)/PBImgAnalysis ]; then wget https://github.com/BayashiPascal/PBImgAnalysis/archive/master.zip; unzip master.zip; rm -f master.zip; mv PBImgAnalysis-master $(ROOT_DIR)/PBImgAnalysis; fi
 
 # Definition of rules for each repository
 
@@ -994,6 +996,57 @@ $(repo)_DEP_O:= \
 	$(pberr_DEP_O) \
 	$(pbmath_DEP_O) \
 	$(gset_DEP_O)
+# List of other dependencies for the repo
+$(repo)_DEP:= \
+	$(ROOT_DIR)/PBMake/Makefile.inc \
+	./Makefile
+# List of object dependencies for the executable
+$(repo)_EXE_DEP:= \
+	$($(repo)_DEP_O)
+# List of other arguments for this repository
+$(repo)_BUILD_ARG:= 
+$(repo)_LINK_ARG:=-lm
+# Shared .o
+$(repo).o: \
+		$($(repo)_DIR)/$(repo).c \
+		$($(repo)_DIR)/$(repo)-inline.c \
+		$($(repo)_INC_H) \
+		$($(repo)_DEP)
+	$(COMPILER) $(BUILD_ARG) $($(basename $@)_INC_DIR) -c $($(basename $@)_DIR)/$(basename $@).c
+
+# ---- PBImgAnalysis
+repo:=pbimganalysis
+# Name of the repository, must be the name of the directory
+$(repo)_NAME:=PBImgAnalysis
+# Executable
+$(repo)_EXENAME:=main
+# Directory of the repository
+$(repo)_DIR:=$(ROOT_DIR)/$($(repo)_NAME)
+# Header of the shared .o
+$(repo)_H:= \
+	$(repo)_wget \
+	$($(repo)_DIR)/$(repo).h
+# List of header includes for the repository
+$(repo)_INC_H:= \
+	$($(repo)_H) \
+	$(pberr_H) \
+	$(pbdataanlysis_H) \
+	$(genbrush_H)
+# List of header includes for the executable
+$(repo)_INC_H_EXE:= \
+	$($(repo)_INC_H)
+# List of directories from where include headers
+$(repo)_INC_DIR:= \
+	-I$($(repo)_DIR) \
+	$(pberr_INC_DIR) \
+	$(pbdataanalysis_INC_DIR) \
+	$(genbrush_INC_DIR)
+# List of object dependencies for the repo
+$(repo)_DEP_O:= \
+	$(repo).o \
+	$(pberr_DEP_O) \
+	$(pbdataanalysis_DEP_O) \
+	$(genbrush_DEP_O)
 # List of other dependencies for the repo
 $(repo)_DEP:= \
 	$(ROOT_DIR)/PBMake/Makefile.inc \
