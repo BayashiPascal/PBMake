@@ -27,6 +27,7 @@ LIST_REPOS=\
 	MiniFrame \
 	PixelToPosEstimator \
 	PBDataAnalysis \
+	PBFileSys \
 	SDSIA \
 	
 
