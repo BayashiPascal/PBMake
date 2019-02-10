@@ -92,6 +92,8 @@ pbfilesys_wget:
 	if [ ! -d $(ROOT_DIR)/PBFileSys ]; then wget https://github.com/BayashiPascal/PBFileSys/archive/master.zip; unzip master.zip; rm -f master.zip; mv PBFileSys-master $(ROOT_DIR)/PBFileSys; fi
 sdsia_wget:
 	if [ ! -d $(ROOT_DIR)/SDSIA ]; then wget https://github.com/BayashiPascal/SDSIA/archive/master.zip; unzip master.zip; rm -f master.zip; mv SDSIA-master $(ROOT_DIR)/SDSIA; fi
+gdataset_wget:
+	if [ ! -d $(ROOT_DIR)/GDataSet ]; then wget https://github.com/BayashiPascal/GDataSet/archive/master.zip; unzip master.zip; rm -f master.zip; mv GDataSet-master $(ROOT_DIR)/GDataSet; fi
 
 # Definition of rules for each repository
 
@@ -1161,7 +1163,7 @@ $(repo).o: \
 	$(COMPILER) $(BUILD_ARG) $($(basename $@)_INC_DIR) -c $($(basename $@)_DIR)/$(basename $@).c
 
 
-# ---- GDATASET
+# ---- GDataSet
 repo:=gdataset
 # Name of the repository, must be the name of the directory
 $(repo)_NAME:=GDataSet
@@ -1178,23 +1180,28 @@ $(repo)_INC_H:= \
 	$($(repo)_H) \
 	$(pberr_H) \
 	$(gset_H) \
+	$(pbmath_H) \
 	$(pbjson_H) \
 	$(pbfilesys_H)
 # List of header includes for the executable
 $(repo)_INC_H_EXE:= \
-	$($(repo)_INC_H)
+	$($(repo)_INC_H) \
+	$(genbrush_INC_H)
 # List of directories from where include headers
 $(repo)_INC_DIR:= \
 	-I$($(repo)_DIR) \
 	$(pberr_INC_DIR) \
 	$(gset_INC_DIR) \
+	$(pbmath_INC_DIR) \
 	$(pbjson_INC_DIR) \
-	$(pbfilesys_INC_DIR)
+	$(pbfilesys_INC_DIR) \
+	$(genbrush_INC_DIR)
 # List of object dependencies for the repo
 $(repo)_DEP_O:= \
 	$(repo).o \
 	$(pberr_DEP_O) \
 	$(gset_DEP_O) \
+	$(pbmath_DEP_O) \
 	$(pbjson_DEP_O) \
 	$(pbfilesys_DEP_O)
 # List of other dependencies for the repo
@@ -1203,7 +1210,8 @@ $(repo)_DEP:= \
 	./Makefile
 # List of object dependencies for the executable
 $(repo)_EXE_DEP:= \
-	$($(repo)_DEP_O)
+	$($(repo)_DEP_O) \
+	$(genbrush_DEP_O)
 # List of other arguments for this repository
 $(repo)_BUILD_ARG:= 
 $(repo)_LINK_ARG:=-lm
