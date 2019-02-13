@@ -1039,7 +1039,8 @@ $(repo)_INC_H:= \
 	$($(repo)_H) \
 	$(pberr_H) \
 	$(pbdataanlysis_H) \
-	$(genbrush_H)
+	$(genbrush_H) \
+	$(neuranet_H)
 # List of header includes for the executable
 $(repo)_INC_H_EXE:= \
 	$($(repo)_INC_H)
@@ -1048,13 +1049,15 @@ $(repo)_INC_DIR:= \
 	-I$($(repo)_DIR) \
 	$(pberr_INC_DIR) \
 	$(pbdataanalysis_INC_DIR) \
-	$(genbrush_INC_DIR)
+	$(genbrush_INC_DIR) \
+	$(neuranet_INC_DIR)
 # List of object dependencies for the repo
 $(repo)_DEP_O:= \
 	$(repo).o \
 	$(pberr_DEP_O) \
 	$(pbdataanalysis_DEP_O) \
-	$(genbrush_DEP_O)
+	$(genbrush_DEP_O) \
+	$(neuranet_DEP_O)
 # List of other dependencies for the repo
 $(repo)_DEP:= \
 	$(ROOT_DIR)/PBMake/Makefile.inc \
