@@ -11,8 +11,10 @@ ROOT_DIR=/home/bayashi/GitHub
 
 ifeq ($(BUILD_MODE), 0)
 	BUILD_ARG=-Wall -Wextra -Og -ggdb -g3 -DPBERRALL='1' \
-	  -DBUILDMODE=$(BUILD_MODE)
-	LINK_ARG=-rdynamic
+	  -DBUILDMODE=$(BUILD_MODE) -fsanitize=address \
+	  -fno-omit-frame-pointer -fsanitize=undefined
+	LINK_ARG=-rdynamic -fsanitize=address -fno-omit-frame-pointer \
+		-fsanitize=undefined -fsanitize=undefined
 else 
   ifeq ($(BUILD_MODE), 1)
 	  BUILD_ARG=-Wall -Wextra -Werror -Wfatal-errors -O3 \
