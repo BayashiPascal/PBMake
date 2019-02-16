@@ -1024,60 +1024,6 @@ $(repo).o: \
 		$($(repo)_DEP)
 	$(COMPILER) $(BUILD_ARG) $($(basename $@)_INC_DIR) -c $($(basename $@)_DIR)/$(basename $@).c
 
-# ---- PBImgAnalysis
-repo:=pbimganalysis
-# Name of the repository, must be the name of the directory
-$(repo)_NAME:=PBImgAnalysis
-# Executable
-$(repo)_EXENAME:=main
-# Directory of the repository
-$(repo)_DIR:=$(ROOT_DIR)/$($(repo)_NAME)
-# Header of the shared .o
-$(repo)_H:= \
-	$(repo)_wget \
-	$($(repo)_DIR)/$(repo).h
-# List of header includes for the repository
-$(repo)_INC_H:= \
-	$($(repo)_H) \
-	$(pberr_H) \
-	$(pbdataanlysis_H) \
-	$(genbrush_H) \
-	$(neuranet_H)
-# List of header includes for the executable
-$(repo)_INC_H_EXE:= \
-	$($(repo)_INC_H)
-# List of directories from where include headers
-$(repo)_INC_DIR:= \
-	-I$($(repo)_DIR) \
-	$(pberr_INC_DIR) \
-	$(pbdataanalysis_INC_DIR) \
-	$(genbrush_INC_DIR) \
-	$(neuranet_INC_DIR)
-# List of object dependencies for the repo
-$(repo)_DEP_O:= \
-	$(repo).o \
-	$(pberr_DEP_O) \
-	$(pbdataanalysis_DEP_O) \
-	$(genbrush_DEP_O) \
-	$(neuranet_DEP_O)
-# List of other dependencies for the repo
-$(repo)_DEP:= \
-	$(ROOT_DIR)/PBMake/Makefile.inc \
-	./Makefile
-# List of object dependencies for the executable
-$(repo)_EXE_DEP:= \
-	$($(repo)_DEP_O)
-# List of other arguments for this repository
-$(repo)_BUILD_ARG:= 
-$(repo)_LINK_ARG:=-lm
-# Shared .o
-$(repo).o: \
-		$($(repo)_DIR)/$(repo).c \
-		$($(repo)_DIR)/$(repo)-inline.c \
-		$($(repo)_INC_H) \
-		$($(repo)_DEP)
-	$(COMPILER) $(BUILD_ARG) $($(basename $@)_INC_DIR) -c $($(basename $@)_DIR)/$(basename $@).c
-
 # ---- PBCExtension
 repo:=pbcextension
 # Name of the repository, must be the name of the directory
@@ -1167,7 +1113,6 @@ $(repo).o: \
 		$($(repo)_DEP)
 	$(COMPILER) $(BUILD_ARG) $($(basename $@)_INC_DIR) -c $($(basename $@)_DIR)/$(basename $@).c
 
-
 # ---- GDataSet
 repo:=gdataset
 # Name of the repository, must be the name of the directory
@@ -1217,6 +1162,63 @@ $(repo)_DEP:= \
 $(repo)_EXE_DEP:= \
 	$($(repo)_DEP_O) \
 	$(genbrush_DEP_O)
+# List of other arguments for this repository
+$(repo)_BUILD_ARG:= 
+$(repo)_LINK_ARG:=-lm
+# Shared .o
+$(repo).o: \
+		$($(repo)_DIR)/$(repo).c \
+		$($(repo)_DIR)/$(repo)-inline.c \
+		$($(repo)_INC_H) \
+		$($(repo)_DEP)
+	$(COMPILER) $(BUILD_ARG) $($(basename $@)_INC_DIR) -c $($(basename $@)_DIR)/$(basename $@).c
+
+# ---- PBImgAnalysis
+repo:=pbimganalysis
+# Name of the repository, must be the name of the directory
+$(repo)_NAME:=PBImgAnalysis
+# Executable
+$(repo)_EXENAME:=main
+# Directory of the repository
+$(repo)_DIR:=$(ROOT_DIR)/$($(repo)_NAME)
+# Header of the shared .o
+$(repo)_H:= \
+	$(repo)_wget \
+	$($(repo)_DIR)/$(repo).h
+# List of header includes for the repository
+$(repo)_INC_H:= \
+	$($(repo)_H) \
+	$(pberr_H) \
+	$(pbdataanalysis_H) \
+	$(genbrush_H) \
+	$(neuranet_H) \
+	$(gdataset_H)
+# List of header includes for the executable
+$(repo)_INC_H_EXE:= \
+	$($(repo)_INC_H)
+# List of directories from where include headers
+$(repo)_INC_DIR:= \
+	-I$($(repo)_DIR) \
+	$(pberr_INC_DIR) \
+	$(pbdataanalysis_INC_DIR) \
+	$(genbrush_INC_DIR) \
+	$(neuranet_INC_DIR) \
+	$(gdataset_INC_DIR)
+# List of object dependencies for the repo
+$(repo)_DEP_O:= \
+	$(repo).o \
+	$(pberr_DEP_O) \
+	$(pbdataanalysis_DEP_O) \
+	$(genbrush_DEP_O) \
+	$(neuranet_DEP_O) \
+	$(gdataset_DEP_O)
+# List of other dependencies for the repo
+$(repo)_DEP:= \
+	$(ROOT_DIR)/PBMake/Makefile.inc \
+	./Makefile
+# List of object dependencies for the executable
+$(repo)_EXE_DEP:= \
+	$($(repo)_DEP_O)
 # List of other arguments for this repository
 $(repo)_BUILD_ARG:= 
 $(repo)_LINK_ARG:=-lm
