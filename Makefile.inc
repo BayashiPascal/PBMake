@@ -1192,6 +1192,7 @@ $(repo)_INC_H:= \
 	$(pbdataanalysis_H) \
 	$(genbrush_H) \
 	$(neuranet_H) \
+	$(genalg_H) \
 	$(gdataset_H)
 # List of header includes for the executable
 $(repo)_INC_H_EXE:= \
@@ -1203,6 +1204,7 @@ $(repo)_INC_DIR:= \
 	$(pbdataanalysis_INC_DIR) \
 	$(genbrush_INC_DIR) \
 	$(neuranet_INC_DIR) \
+	$(genalg_INC_DIR) \
 	$(gdataset_INC_DIR)
 # List of object dependencies for the repo
 $(repo)_DEP_O:= \
@@ -1211,6 +1213,7 @@ $(repo)_DEP_O:= \
 	$(pbdataanalysis_DEP_O) \
 	$(genbrush_DEP_O) \
 	$(neuranet_DEP_O) \
+	$(genalg_DEP_O) \
 	$(gdataset_DEP_O)
 # List of other dependencies for the repo
 $(repo)_DEP:= \
