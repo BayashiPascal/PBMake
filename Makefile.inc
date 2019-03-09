@@ -228,8 +228,8 @@ $(repo)_DEP:= \
 $(repo)_EXE_DEP:= \
 	$($(repo)_DEP_O)
 # List of other arguments for this repository
-$(repo)_BUILD_ARG:= 
-$(repo)_LINK_ARG:= 
+$(repo)_BUILD_ARG:=
+$(repo)_LINK_ARG:=-lm
 # Shared .o
 $(repo).o: \
 		$($(repo)_DIR)/$(repo).c \
