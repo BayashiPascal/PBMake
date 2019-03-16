@@ -749,6 +749,7 @@ $(repo)_H:= \
 $(repo)_INC_H:= \
 	$($(repo)_H) \
 	$(pberr_H) \
+	$(pbcextension_H) \
 	$(pbmath_H) \
 	$(genalg_H) \
 	$(gset_H)
@@ -759,6 +760,7 @@ $(repo)_INC_H_EXE:= \
 $(repo)_INC_DIR:= \
 	-I$($(repo)_DIR) \
 	$(pberr_INC_DIR) \
+	$(pbcextension_INC_DIR) \
 	$(pbmath_INC_DIR) \
 	$(genalg_INC_DIR) \
 	$(gset_INC_DIR)
@@ -766,6 +768,7 @@ $(repo)_INC_DIR:= \
 $(repo)_DEP_O:= \
 	$(repo).o \
 	$(pberr_DEP_O) \
+	$(pbcextension_DEP_O) \
 	$(pbmath_DEP_O) \
 	$(gset_DEP_O)
 # List of other dependencies for the repo
