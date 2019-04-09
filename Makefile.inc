@@ -323,7 +323,7 @@ $(repo)_EXE_DEP:= \
 	$($(repo)_DEP_O)
 # List of other arguments for this repository
 $(repo)_BUILD_ARG:= 
-$(repo)_LINK_ARG:= 
+$(repo)_LINK_ARG:=-lm
 # Shared .o
 $(repo).o: \
 		$($(repo)_DIR)/$(repo).c \
@@ -966,7 +966,7 @@ $(repo).o: \
 		$($(repo)_DIR)/$(repo)-inline-GTK.c \
 		$($(repo)_INC_H) \
 		$($(repo)_DEP)
-	$(COMPILER) $(BUILD_ARG) $($(basename $@)_INC_DIR) -c $($(basename $@)_DIR)/$(basename $@).c
+	$(COMPILER) $(BUILD_ARG) $($(repo)_BUILD_ARG) $($(basename $@)_INC_DIR) -c $($(basename $@)_DIR)/$(basename $@).c
 
 # ---- MiniFrame
 repo:=miniframe
