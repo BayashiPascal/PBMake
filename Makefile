@@ -31,6 +31,9 @@ LIST_REPOS=\
 	PBFileSys \
 	SDSIA \
 	GDataSet \
+	ResPublish \
+	PBImgAnalysis \
+	TheSquid \
 	
 
 all: 
