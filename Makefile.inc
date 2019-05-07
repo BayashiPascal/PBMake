@@ -1393,13 +1393,13 @@ $(repo)_INC_DIR:= \
 # List of object dependencies for the repo
 $(repo)_DEP_O:= \
 	$(repo).o \
-	$(pbmath_O) \
-	$(pberr_O) \
-	$(gset_O) \
-	$(respublish_O) \
-	$(pbjson_O) \
-	$(pbcextension_O) \
-	$(pbfilesys_O)
+	$(pbmath_DEP_O) \
+	$(pberr_DEP_O) \
+	$(gset_DEP_O) \
+	$(respublish_DEP_O) \
+	$(pbjson_DEP_O) \
+	$(pbcextension_DEP_O) \
+	$(pbfilesys_DEP_O)
 # List of other dependencies for the repo
 $(repo)_DEP:= \
 	$(ROOT_DIR)/PBMake/Makefile.inc \
