@@ -1376,6 +1376,7 @@ $(repo)_INC_H:= \
 	$(pbmath_H) \
 	$(pberr_H) \
 	$(gset_H) \
+	$(gtree_H) \
 	$(respublish_H) \
 	$(pbjson_H) \
 	$(pbcextension_H) \
@@ -1389,6 +1390,7 @@ $(repo)_INC_DIR:= \
 	$(pbmath_INC_DIR) \
 	$(pberr_INC_DIR) \
 	$(gset_INC_DIR) \
+	$(gtree_INC_DIR) \
 	$(respublish_INC_DIR) \
 	$(pbjson_INC_DIR) \
 	$(pbcextension_INC_DIR) \
@@ -1399,6 +1401,7 @@ $(repo)_DEP_O:= \
 	$(pbmath_DEP_O) \
 	$(pberr_DEP_O) \
 	$(gset_DEP_O) \
+	$(gtree_DEP_O) \
 	$(respublish_DEP_O) \
 	$(pbjson_DEP_O) \
 	$(pbcextension_DEP_O) \
