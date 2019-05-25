@@ -97,7 +97,7 @@ sdsia_wget:
 gdataset_wget:
 	if [ ! -d $(ROOT_DIR)/GDataSet ]; then wget https://github.com/BayashiPascal/GDataSet/archive/master.zip; unzip master.zip; rm -f master.zip; mv GDataSet-master $(ROOT_DIR)/GDataSet; fi
 thesquid_wget:
-	if [ ! -d $(ROOT_DIR)/GDataSet ]; then wget https://github.com/BayashiPascal/GDataSet/archive/master.zip; unzip master.zip; rm -f master.zip; mv GDataSet-master $(ROOT_DIR)/GDataSet; fi
+	if [ ! -d $(ROOT_DIR)/TheSquid ]; then wget https://github.com/BayashiPascal/TheSquid/archive/master.zip; unzip master.zip; rm -f master.zip; mv TheSquid-master $(ROOT_DIR)/TheSquid; fi
 
 # Definition of rules for each repository
 
@@ -350,6 +350,7 @@ $(repo)_H:= \
 $(repo)_INC_H:= \
 	$($(repo)_H) \
 	$(pberr_H) \
+	$(gtree_H) \
 	$(pbjson_H)
 # List of header includes for the executable
 $(repo)_INC_H_EXE:= \
@@ -358,11 +359,13 @@ $(repo)_INC_H_EXE:= \
 $(repo)_INC_DIR:= \
 	-I$($(repo)_DIR) \
 	$(pberr_INC_DIR) \
+	$(gtree_INC_DIR) \
 	$(pbjson_INC_DIR)
 # List of object dependencies for the repo
 $(repo)_DEP_O:= \
 	$(repo).o \
 	$(pberr_DEP_O) \
+	$(gtree_DEP_O) \
 	$(pbjson_DEP_O)
 # List of other dependencies for the repo
 $(repo)_DEP:= \
