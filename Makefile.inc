@@ -10,21 +10,40 @@ ROOT_DIR=/home/bayashi/GitHub
 # Compiler arguments depending on BUILD_MODE
 
 ifeq ($(BUILD_MODE), 0)
-	BUILD_ARG=-Wall -Wextra -Og -ggdb -g3 -DPBERRALL='1' \
+	BUILD_ARG_MODE=-Wall -Wextra -Og -ggdb -g3 -DPBERRALL='1' \
 	  -DBUILDMODE=$(BUILD_MODE)
-	LINK_ARG=-rdynamic
+	LINK_ARG_MODE=-rdynamic
 else 
   ifeq ($(BUILD_MODE), 1)
-	  BUILD_ARG=-Wall -Wextra -Werror -Wfatal-errors -O3 \
+	  BUILD_ARG_MODE=-Wall -Wextra -Werror -Wfatal-errors -O3 \
 		  -DPBERRSAFEMALLOC='1' -DPBERRSAFEIO='1' -DBUILDMODE=$(BUILD_MODE)
-	  LINK_ARG=-rdynamic
+	  LINK_ARG_MODE=-rdynamic
   else 
     ifeq ($(BUILD_MODE), 2)
-	    BUILD_ARG=-Wall -Wextra -Werror -Wfatal-errors -O3 \
+	    BUILD_ARG_MODE=-Wall -Wextra -Werror -Wfatal-errors -O3 \
 		    -DBUILDMODE=$(BUILD_MODE)
-	    LINK_ARG=
+	    LINK_ARG_MODE=
 		endif
 	endif
+endif
+
+# Architecture on which the squidlet is running
+# 0: PC
+# 1: Raspberry Pi 3B
+# 2: Raspberry Pi 3B+
+BUILD_ARCH=0
+
+# Compiler arguments depending on BUILD_ARCH
+
+ifeq ($(BUILD_ARCH), 2)
+	BUILD_ARG=$(BUILD_ARG_MODE) -march=armv6zk -mcpu=arm1176jzf-s \
+		-mfloat-abi=hard -mfpu=vfp -DBUILDARCH=$(BUILD_MODE) \
+		-DBUILDARCH=$(BUILD_ARCH)
+	LINK_ARG=$(LINK_ARG_MODE) -march=armv6zk -mcpu=arm1176jzf-s \ 
+		-mfloat-abi=hard -mfpu=vfp -DBUILDARCH=$(BUILD_ARCH)
+else
+	BUILD_ARG=$(BUILD_ARG_MODE) -DBUILDARCH=$(BUILD_ARCH)
+	LINK_ARG=$(LINK_ARG_MODE) -DBUILDARCH=$(BUILD_ARCH)
 endif
 
 # Compiler
