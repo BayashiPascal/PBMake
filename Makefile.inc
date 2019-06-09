@@ -37,8 +37,7 @@ BUILD_ARCH=0
 
 ifeq ($(BUILD_ARCH), 2)
 	BUILD_ARG=$(BUILD_ARG_MODE) -march=armv6zk -mcpu=arm1176jzf-s \
-		-mfloat-abi=hard -mfpu=vfp -DBUILDARCH=$(BUILD_MODE) \
-		-DBUILDARCH=$(BUILD_ARCH)
+		-mfloat-abi=hard -mfpu=vfp -DBUILDARCH=$(BUILD_ARCH)
 	LINK_ARG=$(LINK_ARG_MODE) -march=armv6zk -mcpu=arm1176jzf-s \ 
 		-mfloat-abi=hard -mfpu=vfp -DBUILDARCH=$(BUILD_ARCH)
 else
