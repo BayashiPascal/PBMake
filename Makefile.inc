@@ -45,7 +45,7 @@ endif
 
 # Compiler
 
-COMPILER=gcc
+COMPILER=gcc-6
 
 # Cleaning rule
 
@@ -318,6 +318,7 @@ $(repo)_H:= \
 $(repo)_INC_H:= \
 	$($(repo)_H) \
 	$(pberr_H) \
+	$(gset_H) \
 	$(gtree_H)
 # List of header includes for the executable
 $(repo)_INC_H_EXE:= \
@@ -326,11 +327,13 @@ $(repo)_INC_H_EXE:= \
 $(repo)_INC_DIR:= \
 	-I$($(repo)_DIR) \
 	$(pberr_INC_DIR) \
+	$(gset_INC_DIR) \
 	$(gtree_INC_DIR)
 # List of object dependencies for the repo
 $(repo)_DEP_O:= \
 	$(repo).o \
 	$(pberr_DEP_O) \
+	$(gset_DEP_O) \
 	$(gtree_DEP_O)
 # List of other dependencies for the repo
 $(repo)_DEP:= \
