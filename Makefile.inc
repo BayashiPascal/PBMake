@@ -983,6 +983,7 @@ endif
 $(repo)_BUILD_ARG:=$(GTKPARAM) $(CAIROPARAM)
 $(repo)_LINK_ARG:=-lm $(GTKLINK) $(CAIROLINK)
 # Shared .o
+ifeq ($(BUILDWITHGRAPHICLIB),1)
 $(repo).o: \
 		$($(repo)_DIR)/$(repo).c \
 		$($(repo)_DIR)/$(repo)-inline.c \
@@ -991,6 +992,14 @@ $(repo).o: \
 		$($(repo)_INC_H) \
 		$($(repo)_DEP)
 	$(COMPILER) $(BUILD_ARG) $($(basename $@)_BUILD_ARG) $($(basename $@)_INC_DIR) -c $($(basename $@)_DIR)/$(basename $@).c
+else
+$(repo).o: \
+		$($(repo)_DIR)/$(repo).c \
+		$($(repo)_DIR)/$(repo)-inline.c \
+		$($(repo)_INC_H) \
+		$($(repo)_DEP)
+	$(COMPILER) $(BUILD_ARG) $($(basename $@)_BUILD_ARG) $($(basename $@)_INC_DIR) -c $($(basename $@)_DIR)/$(basename $@).c
+endif
 
 # ---- MiniFrame
 repo:=miniframe
@@ -1400,6 +1409,8 @@ $(repo)_INC_H:= \
 	$(pbjson_H) \
 	$(pbcextension_H) \
 	$(pbfilesys_H) \
+	$(bcurve_H) \
+	$(shapoid_H) \
 	$(genbrush_H)
 # List of header includes for the executable
 $(repo)_INC_H_EXE:= \
@@ -1415,6 +1426,8 @@ $(repo)_INC_DIR:= \
 	$(pbjson_INC_DIR) \
 	$(pbcextension_INC_DIR) \
 	$(pbfilesys_INC_DIR) \
+	$(bcurve_INC_DIR) \
+	$(shapoid_INC_DIR) \
 	$(genbrush_INC_DIR)
 # List of object dependencies for the repo
 $(repo)_DEP_O:= \
@@ -1427,6 +1440,8 @@ $(repo)_DEP_O:= \
 	$(pbjson_DEP_O) \
 	$(pbcextension_DEP_O) \
 	$(pbfilesys_DEP_O) \
+	$(bcurve_DEP_O) \
+	$(shapoid_DEP_O) \
 	$(genbrush_DEP_O)
 # List of other dependencies for the repo
 $(repo)_DEP:= \
