@@ -105,7 +105,7 @@ pbdataanalysis_wget:
 pbimganalysis_wget:
 	if [ ! -d $(ROOT_DIR)/PBImgAnalysis ]; then wget https://github.com/BayashiPascal/PBImgAnalysis/archive/master.zip; unzip master.zip; rm -f master.zip; mv PBImgAnalysis-master $(ROOT_DIR)/PBImgAnalysis; fi
 pbcextension_wget:
-	if [ ! -d $(ROOT_DIR)/PBFileSys ]; then wget https://github.com/BayashiPascal/PBCExtension/archive/master.zip; unzip master.zip; rm -f master.zip; mv PBCExtension-master $(ROOT_DIR)/PBCExtension; fi
+	if [ ! -d $(ROOT_DIR)/PBCExtension ]; then wget https://github.com/BayashiPascal/PBCExtension/archive/master.zip; unzip master.zip; rm -f master.zip; mv PBCExtension-master $(ROOT_DIR)/PBCExtension; fi
 pbfilesys_wget:
 	if [ ! -d $(ROOT_DIR)/PBFileSys ]; then wget https://github.com/BayashiPascal/PBFileSys/archive/master.zip; unzip master.zip; rm -f master.zip; mv PBFileSys-master $(ROOT_DIR)/PBFileSys; fi
 sdsia_wget:
@@ -1399,7 +1399,8 @@ $(repo)_INC_H:= \
 	$(respublish_H) \
 	$(pbjson_H) \
 	$(pbcextension_H) \
-	$(pbfilesys_H)
+	$(pbfilesys_H) \
+	$(genbrush_H)
 # List of header includes for the executable
 $(repo)_INC_H_EXE:= \
 	$($(repo)_INC_H)
@@ -1413,7 +1414,8 @@ $(repo)_INC_DIR:= \
 	$(respublish_INC_DIR) \
 	$(pbjson_INC_DIR) \
 	$(pbcextension_INC_DIR) \
-	$(pbfilesys_INC_DIR)
+	$(pbfilesys_INC_DIR) \
+	$(genbrush_INC_DIR)
 # List of object dependencies for the repo
 $(repo)_DEP_O:= \
 	$(repo).o \
@@ -1424,7 +1426,8 @@ $(repo)_DEP_O:= \
 	$(respublish_DEP_O) \
 	$(pbjson_DEP_O) \
 	$(pbcextension_DEP_O) \
-	$(pbfilesys_DEP_O)
+	$(pbfilesys_DEP_O) \
+	$(genbrush_DEP_O)
 # List of other dependencies for the repo
 $(repo)_DEP:= \
 	$(ROOT_DIR)/PBMake/Makefile.inc \
