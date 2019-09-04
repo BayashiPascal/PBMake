@@ -1171,7 +1171,8 @@ $(repo)_INC_H:= \
 	$(gset_H) \
 	$(pbmath_H) \
 	$(pbjson_H) \
-	$(pbfilesys_H)
+	$(pbfilesys_H) \
+	$(neuranet_H)
 # List of header includes for the executable
 $(repo)_INC_H_EXE:= \
 	$($(repo)_INC_H) \
@@ -1184,7 +1185,8 @@ $(repo)_INC_DIR:= \
 	$(pbmath_INC_DIR) \
 	$(pbjson_INC_DIR) \
 	$(pbfilesys_INC_DIR) \
-	$(genbrush_INC_DIR)
+	$(genbrush_INC_DIR) \
+	$(neuranet_INC_DIR)
 # List of object dependencies for the repo
 $(repo)_DEP_O:= \
 	$(repo).o \
@@ -1193,7 +1195,8 @@ $(repo)_DEP_O:= \
 	$(pbmath_DEP_O) \
 	$(pbjson_DEP_O) \
 	$(pbfilesys_DEP_O) \
-	$(genbrush_DEP_O)
+	$(genbrush_DEP_O) \
+	$(neuranet_DEP_O)
 # List of other dependencies for the repo
 $(repo)_DEP:= \
 	$(ROOT_DIR)/PBMake/Makefile.inc \
