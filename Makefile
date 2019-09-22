@@ -34,6 +34,7 @@ LIST_REPOS=\
 	ResPublish \
 	PBImgAnalysis \
 	TheSquid \
+	NNSquidTrainer \
 	
 
 all: 
