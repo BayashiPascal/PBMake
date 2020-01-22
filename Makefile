@@ -35,6 +35,7 @@ LIST_REPOS=\
 	PBImgAnalysis \
 	TheSquid \
 	NNSquidTrainer \
+	CBo \
 	
 
 all: 
