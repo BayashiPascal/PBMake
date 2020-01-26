@@ -1532,6 +1532,7 @@ $(repo)_INC_H:= \
 	$($(repo)_H) \
 	$(gset_H) \
 	$(respublish_H) \
+	$(pbcextension_H) \
 	$(pberr_H)
 # List of header includes for the executable
 $(repo)_INC_H_EXE:= \
@@ -1541,12 +1542,14 @@ $(repo)_INC_DIR:= \
 	-I$($(repo)_DIR) \
 	$(gset_INC_DIR) \
 	$(respublish_INC_DIR) \
+	$(pbcextension_INC_DIR) \
 	$(pberr_INC_DIR)
 # List of object dependencies for the repo
 $(repo)_DEP_O:= \
 	$(repo).o \
 	$(gset_DEP_O) \
 	$(respublish_DEP_O) \
+	$(pbcextension_DEP_O) \
 	$(pberr_DEP_O)
 # List of other dependencies for the repo
 $(repo)_DEP:= \
