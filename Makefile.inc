@@ -58,6 +58,11 @@ valgrind :
 	valgrind -v --track-origins=yes --leak-check=full \
 	--gen-suppressions=yes --show-leak-kinds=all ./main
 
+# CppCheck rule
+
+cppcheck :
+	cppcheck --enable=all ./
+
 # Make the documentation
 
 latex:
