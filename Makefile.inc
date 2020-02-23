@@ -1574,3 +1574,51 @@ $(repo).o: \
 		$($(repo)_DEP)
 	$(COMPILER) $(BUILD_ARG) $($(basename $@)_INC_DIR) -c $($(basename $@)_DIR)/$(basename $@).c
 
+# ---- Cryptic
+repo:=cryptic
+# Name of the repository, must be the name of the directory
+$(repo)_NAME:=Cryptic
+# Executable
+$(repo)_EXENAME:=main
+# Directory of the repository
+$(repo)_DIR:=$(ROOT_DIR)/$($(repo)_NAME)
+# Header of the shared .o
+$(repo)_H:= \
+	$(repo)_wget \
+	$($(repo)_DIR)/$(repo).h
+# List of header includes for the repository
+$(repo)_INC_H:= \
+	$($(repo)_H) \
+	$(gset_H) \
+	$(pberr_H)
+# List of header includes for the executable
+$(repo)_INC_H_EXE:= \
+	$($(repo)_INC_H)
+# List of directories from where include headers
+$(repo)_INC_DIR:= \
+	-I$($(repo)_DIR) \
+	$(gset_INC_DIR) \
+	$(pberr_INC_DIR)
+# List of object dependencies for the repo
+$(repo)_DEP_O:= \
+	$(repo).o \
+	$(gset_DEP_O) \
+	$(pberr_DEP_O)
+# List of other dependencies for the repo
+$(repo)_DEP:= \
+	$(ROOT_DIR)/PBMake/Makefile.inc \
+	./Makefile
+# List of object dependencies for the executable
+$(repo)_EXE_DEP:= \
+	$($(repo)_DEP_O)
+# List of other arguments for this repository
+$(repo)_BUILD_ARG:= 
+$(repo)_LINK_ARG:=-lm
+# Shared .o
+$(repo).o: \
+		$($(repo)_DIR)/$(repo).c \
+		$($(repo)_DIR)/$(repo)-inline.c \
+		$($(repo)_INC_H) \
+		$($(repo)_DEP)
+	$(COMPILER) $(BUILD_ARG) $($(basename $@)_INC_DIR) -c $($(basename $@)_DIR)/$(basename $@).c
+

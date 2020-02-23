@@ -36,6 +36,7 @@ LIST_REPOS=\
 	TheSquid \
 	NNSquidTrainer \
 	CBo \
+	Cryptic \
 	
 
 all: 
@@ -43,3 +44,6 @@ all:
 
 clean:
 	for repo in $(LIST_REPOS); do if [ -d ../$$repo ]; then make -C ../$$repo clean; fi; done;
+
+cbo:
+	cbo *.[ch]
