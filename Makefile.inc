@@ -123,6 +123,8 @@ nnsquidtrainer_wget:
 	if [ ! -d $(ROOT_DIR)/NNSquidTrainer ]; then wget https://github.com/BayashiPascal/NNSquidTrainer/archive/master.zip; unzip master.zip; rm -f master.zip; mv NNSquidTrainer-master $(ROOT_DIR)/NNSquidTrainer; fi
 cbo_wget:
 	if [ ! -d $(ROOT_DIR)/CBo ]; then wget https://github.com/BayashiPascal/CBo/archive/master.zip; unzip master.zip; rm -f master.zip; mv CBo-master $(ROOT_DIR)/CBo; fi
+cryptic_wget:
+	if [ ! -d $(ROOT_DIR)/Cryptic ]; then wget https://github.com/BayashiPascal/Cryptic/archive/master.zip; unzip master.zip; rm -f master.zip; mv Cryptic-master $(ROOT_DIR)/Cryptic; fi
 
 # Definition of rules for each repository
 
