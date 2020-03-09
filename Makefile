@@ -42,6 +42,7 @@ LIST_REPOS=\
 	NNSquidTrainer \
 	CBo \
 	Cryptic \
+	GradAutomaton \
 	
 
 all: 
@@ -82,6 +83,7 @@ LIST_OBJ=\
 	../TheSquid/thesquid.o \
 	../CBo/cbo.o \
 	../Cryptic/cryptic.o \
+	../GradAutomaton/gradautomaton.o \
 	
 
 LIST_INCLUDE=\
@@ -133,6 +135,8 @@ LIST_INCLUDE=\
 	../CBo/cbo.h \
 	../Cryptic/cryptic.h \
 	../Cryptic/cryptic-inline.c \
+	../GradAutomaton/gradautomaton.h \
+	../GradAutomaton/gradautomaton-inline.c \
 	
 
 libAll: libDev libRelease
