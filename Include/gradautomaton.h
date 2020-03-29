@@ -14,6 +14,7 @@
 #include "pbmath.h"
 #include "gset.h"
 #include "grad.h"
+#include "genalg.h"
 #include "neuranet.h"
 
 // -------------- GrACell
