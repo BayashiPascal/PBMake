@@ -488,7 +488,7 @@ NeuraNet* GrAFunNeuraNetNN(
 #if BUILDMODE != 0
 static inline
 #endif
-Grad* _GradAutomatonGrad(GradAutomaton* const that) {
+Grad* _GradAutomatonGrad(const GradAutomaton* const that) {
 
 #if BUILDMODE == 0
   if (that == NULL) {
@@ -583,6 +583,30 @@ GrACell* _GradAutomatonCellIndex(
 
 }
 
+// Return the dimension of the status of the GradAutomaton 'that'
+#if BUILDMODE != 0
+static inline
+#endif
+long _GradAutomatonGetDimStatus(const GradAutomaton* const that) {
+
+#if BUILDMODE == 0
+  if (that == NULL) {
+
+    GradAutomatonErr->_type = PBErrTypeNullPointer;
+    sprintf(
+      GradAutomatonErr->_msg,
+      "'that' is null");
+    PBErrCatch(GradAutomatonErr);
+
+  }
+
+#endif
+
+  // Return the dimension of the status
+  return that->dimStatus;
+
+}
+
 // -------------- GradAutomatonDummy
 
 // ================ Functions implementation ====================
@@ -591,7 +615,8 @@ GrACell* _GradAutomatonCellIndex(
 #if BUILDMODE != 0
 static inline
 #endif
-GradSquare* _GradAutomatonDummyGrad(GradAutomatonDummy* const that) {
+GradSquare* _GradAutomatonDummyGrad(
+  const GradAutomatonDummy* const that) {
 
 #if BUILDMODE == 0
   if (that == NULL) {
@@ -615,7 +640,8 @@ GradSquare* _GradAutomatonDummyGrad(GradAutomatonDummy* const that) {
 #if BUILDMODE != 0
 static inline
 #endif
-GrAFunDummy* _GradAutomatonDummyFun(GradAutomatonDummy* const that) {
+GrAFunDummy* _GradAutomatonDummyFun(
+  const GradAutomatonDummy* const that) {
 
 #if BUILDMODE == 0
   if (that == NULL) {
@@ -720,7 +746,7 @@ GrACellShort* _GradAutomatonDummyCellIndex(
 static inline
 #endif
 GradSquare* _GradAutomatonWolframOriginalGrad(
-  GradAutomatonWolframOriginal* const that) {
+  const GradAutomatonWolframOriginal* const that) {
 
 #if BUILDMODE == 0
   if (that == NULL) {
@@ -745,7 +771,7 @@ GradSquare* _GradAutomatonWolframOriginalGrad(
 static inline
 #endif
 GrAFunWolframOriginal* _GradAutomatonWolframOriginalFun(
-  GradAutomatonWolframOriginal* const that) {
+  const GradAutomatonWolframOriginal* const that) {
 
 #if BUILDMODE == 0
   if (that == NULL) {
@@ -849,7 +875,8 @@ GrACellShort* _GradAutomatonWolframOriginalCellIndex(
 #if BUILDMODE != 0
 static inline
 #endif
-Grad* _GradAutomatonNeuraNetGrad(GradAutomatonNeuraNet* const that) {
+Grad* _GradAutomatonNeuraNetGrad(
+  const GradAutomatonNeuraNet* const that) {
 
 #if BUILDMODE == 0
   if (that == NULL) {
@@ -899,7 +926,7 @@ GradType GradAutomatonNeuraNetGetGradType(
 static inline
 #endif
 GrAFunNeuraNet* _GradAutomatonNeuraNetFun(
-  GradAutomatonNeuraNet* const that) {
+  const GradAutomatonNeuraNet* const that) {
 
 #if BUILDMODE == 0
   if (that == NULL) {
@@ -992,5 +1019,30 @@ GrACellFloat* _GradAutomatonNeuraNetCellIndex(
 
   // Return the GrACellFloat associated to the cell
   return (GrACellFloat*)GradCellData(cell);
+
+}
+
+// Return the number of hidden layers of the GradAutomatonNeuraNet 'that'
+#if BUILDMODE != 0
+static inline
+#endif
+long GradAutomatonNeuraNetGetNbHiddenLayers(
+  const GradAutomatonNeuraNet* const that) {
+
+#if BUILDMODE == 0
+  if (that == NULL) {
+
+    GradAutomatonErr->_type = PBErrTypeNullPointer;
+    sprintf(
+      GradAutomatonErr->_msg,
+      "'that' is null");
+    PBErrCatch(GradAutomatonErr);
+
+  }
+
+#endif
+
+  // Return the number of hidden layers
+  return that->nbHiddenLayers;
 
 }

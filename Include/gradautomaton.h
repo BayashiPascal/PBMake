@@ -367,7 +367,9 @@ typedef struct GrAFunNeuraNet {
 
 // Create a new GrAFunNeuraNet
 GrAFunNeuraNet* GrAFunCreateNeuraNet(
-  NeuraNet* const nn);
+             const int nbIn,
+             const int nbOut,
+  const VecLong* const hiddenLayers);
 
 // Free the memory used by the GrAFunNeuraNet 'that'
 void _GrAFunNeuraNetFree(GrAFunNeuraNet** that);
@@ -431,7 +433,7 @@ typedef struct GradAutomaton {
   GradAutomatonType type;
 
   // Dimension of the status vector of each cell
-  long dim;
+  long dimStatus;
 
   // Grad
   Grad* grad;
@@ -447,13 +449,14 @@ typedef struct GradAutomaton {
 GradAutomaton GradAutomatonCreateStatic(
   const GradAutomatonType type,
               Grad* const grad,
-            GrAFun* const fun);
+            GrAFun* const fun,
+               const long dimStatus);
 
 // Return the Grad of the GradAutomaton 'that'
 #if BUILDMODE != 0
 static inline
 #endif
-Grad* _GradAutomatonGrad(GradAutomaton* const that);
+Grad* _GradAutomatonGrad(const GradAutomaton* const that);
 
 // Return the GrACellShort at position 'pos' for the
 // GradAutomaton 'that'
@@ -475,6 +478,12 @@ GrACell* _GradAutomatonCellIndex(
 // Switch the status of all the cells of the GradAutomaton 'that'
 void _GradAutomatonSwitchAllStatus(GradAutomaton* const that);
 
+// Return the dimension of the status of the GradAutomaton 'that'
+#if BUILDMODE != 0
+static inline
+#endif
+long _GradAutomatonGetDimStatus(const GradAutomaton* const that);
+
 // -------------- GradAutomatonDummy
 
 // ================= Define ==================
@@ -491,12 +500,6 @@ typedef struct GradAutomatonDummy {
 
 // ================ Functions declaration ====================
 
-// Create a new static GradAutomaton
-GradAutomaton GradAutomatonCreateStatic(
-  const GradAutomatonType type,
-              Grad* const grad,
-            GrAFun* const fun);
-
 // Create a new GradAutomatonDummy
 GradAutomatonDummy* GradAutomatonCreateDummy();
 
@@ -510,13 +513,15 @@ void _GradAutomatonDummyStep(GradAutomatonDummy* const that);
 #if BUILDMODE != 0
 static inline
 #endif
-GradSquare* _GradAutomatonDummyGrad(GradAutomatonDummy* const that);
+GradSquare* _GradAutomatonDummyGrad(
+  const GradAutomatonDummy* const that);
 
 // Return the GrAFun of the GradAutomatonDummy 'that'
 #if BUILDMODE != 0
 static inline
 #endif
-GrAFunDummy* _GradAutomatonDummyFun(GradAutomatonDummy* const that);
+GrAFunDummy* _GradAutomatonDummyFun(
+  const GradAutomatonDummy* const that);
 
 // Return the GrACellShort at position 'pos' for the
 // GradAutomatonDummy 'that'
@@ -564,19 +569,28 @@ void GradAutomatonWolframOriginalFree(
 void _GradAutomatonWolframOriginalStep(
   GradAutomatonWolframOriginal* const that);
 
+// JSON encoding of GradAutomatonWolframOriginal 'that'
+JSONNode* _GradAutomatonWolframOriginalEncodeAsJSON(
+  const GradAutomatonWolframOriginal* const that);
+
+// Function which decode from JSON encoding 'json' to 'that'
+bool _GradAutomatonWolframOriginalDecodeAsJSON(
+  GradAutomatonWolframOriginal** that,
+           const JSONNode* const json);
+
 // Return the Grad of the GradAutomatonWolframOriginal 'that'
 #if BUILDMODE != 0
 static inline
 #endif
 GradSquare* _GradAutomatonWolframOriginalGrad(
-  GradAutomatonWolframOriginal* const that);
+  const GradAutomatonWolframOriginal* const that);
 
 // Return the GrAFun of the GradAutomatonWolframOriginal 'that'
 #if BUILDMODE != 0
 static inline
 #endif
 GrAFunWolframOriginal* _GradAutomatonWolframOriginalFun(
-  GradAutomatonWolframOriginal* const that);
+  const GradAutomatonWolframOriginal* const that);
 
 // Return the GrACellShort at position 'pos' for the
 // GradAutomatonWolframOriginal 'that'
@@ -601,6 +615,24 @@ void _GradAutomatonWolframOriginalPrintln(
   GradAutomatonWolframOriginal* const that,
                                 FILE* stream);
 
+// Save the GradAutomatonWolframOriginal 'that' to the stream 'stream'
+// If 'compact' equals true it saves in compact form, else it saves in
+// readable form
+// Return true if the GradAutomatonWolframOriginal could be saved,
+// false else
+bool _GradAutomatonWolframOriginalSave(
+  const GradAutomatonWolframOriginal* const that,
+                                FILE* const stream,
+                                 const bool compact);
+
+// Load the GradAutomatonWolfraOriginal 'that' from the stream 'stream'
+// If 'that' is not null the memory is first freed
+// Return true if the GradAutomatonWolframOriginal could be loaded,
+// false else
+bool _GradAutomatonWolframOriginalLoad(
+  GradAutomatonWolframOriginal** that,
+                     FILE* const stream);
+
 // -------------- GradAutomatonNeuraNet
 
 // ================= Define ==================
@@ -613,6 +645,9 @@ typedef struct GradAutomatonNeuraNet {
   // Parent GradAutomaton
   GradAutomaton gradAutomaton;
 
+  // Number of hidden layers
+  long nbHiddenLayers;
+
 } GradAutomatonNeuraNet;
 
 // ================ Functions declaration ====================
@@ -622,14 +657,14 @@ GradAutomatonNeuraNet* GradAutomatonCreateNeuraNetSquare(
                const long dimStatus,
   const VecShort2D* const dimGrad,
                const bool diagLink,
-          NeuraNet* const nn);
+               const long nbHiddenLayers);
 
 // Create a new GradAutomatonNeuraNet with a GradHexa
 GradAutomatonNeuraNet* GradAutomatonCreateNeuraNetHexa(
                const long dimStatus,
   const VecShort2D* const dimGrad,
        const GradHexaType gradType,
-          NeuraNet* const nn);
+               const long nbHiddenLayers);
 
 // Free the memory used by the GradAutomatonNeuraNet 'that'
 void GradAutomatonNeuraNetFree(
@@ -642,7 +677,8 @@ void _GradAutomatonNeuraNetStep(GradAutomatonNeuraNet* const that);
 #if BUILDMODE != 0
 static inline
 #endif
-Grad* _GradAutomatonNeuraNetGrad(GradAutomatonNeuraNet* const that);
+Grad* _GradAutomatonNeuraNetGrad(
+  const GradAutomatonNeuraNet* const that);
 
 // Return the type of Grad of the GradAutomatonNeuraNet 'that'
 #if BUILDMODE != 0
@@ -656,7 +692,7 @@ GradType GradAutomatonNeuraNetGetGradType(
 static inline
 #endif
 GrAFunNeuraNet* _GradAutomatonNeuraNetFun(
-  GradAutomatonNeuraNet* const that);
+  const GradAutomatonNeuraNet* const that);
 
 // Return the GrACellFloat at position 'pos' for the
 // GradAutomatonNeuraNet 'that'
@@ -676,6 +712,40 @@ GrACellFloat* _GradAutomatonNeuraNetCellIndex(
   GradAutomatonNeuraNet* const that,
                     const long iCell);
 
+// JSON encoding of GradAutomatonNeuraNet 'that'
+JSONNode* _GradAutomatonNeuraNetEncodeAsJSON(
+  const GradAutomatonNeuraNet* const that);
+
+// Function which decode from JSON encoding 'json' to 'that'
+bool _GradAutomatonNeuraNetDecodeAsJSON(
+  GradAutomatonNeuraNet** that,
+    const JSONNode* const json);
+
+// Save the GradAutomatonNeuraNet 'that' to the stream 'stream'
+// If 'compact' equals true it saves in compact form, else it saves in
+// readable form
+// Return true if the GradAutomatonNeuraNet could be saved,
+// false else
+bool _GradAutomatonNeuraNetSave(
+  const GradAutomatonNeuraNet* const that,
+                         FILE* const stream,
+                          const bool compact);
+
+// Load the GradAutomatonWolfraOriginal 'that' from the stream 'stream'
+// If 'that' is not null the memory is first freed
+// Return true if the GradAutomatonNeuraNet could be loaded,
+// false else
+bool _GradAutomatonNeuraNetLoad(
+  GradAutomatonNeuraNet** that,
+              FILE* const stream);
+
+// Return the number of hidden layers of the GradAutomatonNeuraNet 'that'
+#if BUILDMODE != 0
+static inline
+#endif
+long GradAutomatonNeuraNetGetNbHiddenLayers(
+  const GradAutomatonNeuraNet* const that);
+
 // ================= Polymorphism ==================
 
 #define GradAutomatonSwitchAllStatus(G) _Generic(G, \
@@ -693,15 +763,24 @@ GrACellFloat* _GradAutomatonNeuraNetCellIndex(
 
 #define GradAutomatonGrad(G) _Generic(G, \
   GradAutomaton* : _GradAutomatonGrad, \
+  const GradAutomaton* : _GradAutomatonGrad, \
   GradAutomatonDummy* : _GradAutomatonDummyGrad, \
+  const GradAutomatonDummy* : _GradAutomatonDummyGrad, \
   GradAutomatonWolframOriginal* : _GradAutomatonWolframOriginalGrad, \
+  const GradAutomatonWolframOriginal* : \
+    _GradAutomatonWolframOriginalGrad, \
   GradAutomatonNeuraNet* : _GradAutomatonNeuraNetGrad, \
+  const GradAutomatonNeuraNet* : _GradAutomatonNeuraNetGrad, \
   default: PBErrInvalidPolymorphism)(G)
 
 #define GradAutomatonFun(G) _Generic(G, \
   GradAutomatonDummy* : _GradAutomatonDummyFun, \
+  const GradAutomatonDummy* : _GradAutomatonDummyFun, \
   GradAutomatonWolframOriginal* : _GradAutomatonWolframOriginalFun, \
+  const GradAutomatonWolframOriginal* : \
+    _GradAutomatonWolframOriginalFun, \
   GradAutomatonNeuraNet* : _GradAutomatonNeuraNetFun, \
+  const GradAutomatonNeuraNet* : _GradAutomatonNeuraNetFun, \
   default: PBErrInvalidPolymorphism)(G)
 
 #define GradAutomatonCell(G, P) _Generic(G, \
@@ -737,6 +816,57 @@ GrACellFloat* _GradAutomatonNeuraNetCellIndex(
   const GradAutomatonWolframOriginal* :\
     _GradAutomatonWolframOriginalPrintln, \
   default: PBErrInvalidPolymorphism)(G, S)
+
+#define GradAutomatonEncodeAsJSON(G) _Generic(G, \
+  GradAutomatonWolframOriginal* : \
+    _GradAutomatonWolframOriginalEncodeAsJSON, \
+  const GradAutomatonWolframOriginal* :\
+    _GradAutomatonWolframOriginalEncodeAsJSON, \
+  GradAutomatonNeuraNet* : \
+    _GradAutomatonNeuraNetEncodeAsJSON, \
+  const GradAutomatonNeuraNet* :\
+    _GradAutomatonNeuraNetEncodeAsJSON, \
+  default: PBErrInvalidPolymorphism)(G)
+
+#define GradAutomatonDecodeAsJSON(G, J) _Generic(G, \
+  GradAutomatonWolframOriginal** : \
+    _GradAutomatonWolframOriginalDecodeAsJSON, \
+  GradAutomatonNeuraNet** : \
+    _GradAutomatonNeuraNetDecodeAsJSON, \
+  default: PBErrInvalidPolymorphism)(G, J)
+
+#define GradAutomatonSave(G, S, C) _Generic(G, \
+  GradAutomatonWolframOriginal* : \
+    _GradAutomatonWolframOriginalSave, \
+  const GradAutomatonWolframOriginal* :\
+    _GradAutomatonWolframOriginalSave, \
+  GradAutomatonNeuraNet* : \
+    _GradAutomatonNeuraNetSave, \
+  const GradAutomatonNeuraNet* :\
+    _GradAutomatonNeuraNetSave, \
+  default: PBErrInvalidPolymorphism)(G, S, C)
+
+#define GradAutomatonLoad(G, S) _Generic(G, \
+  GradAutomatonWolframOriginal** : \
+    _GradAutomatonWolframOriginalLoad, \
+  GradAutomatonNeuraNet** : \
+    _GradAutomatonNeuraNetLoad, \
+  default: PBErrInvalidPolymorphism)(G, S)
+
+#define GradAutomatonGetDimStatus(G) _Generic(G, \
+  GradAutomaton* : \
+    _GradAutomatonGetDimStatus, \
+  const GradAutomaton* :\
+    _GradAutomatonGetDimStatus, \
+  GradAutomatonWolframOriginal* : \
+    _GradAutomatonGetDimStatus, \
+  const GradAutomatonWolframOriginal* :\
+    _GradAutomatonGetDimStatus, \
+  GradAutomatonNeuraNet* : \
+    _GradAutomatonGetDimStatus, \
+  const GradAutomatonNeuraNet* :\
+    _GradAutomatonGetDimStatus, \
+  default: PBErrInvalidPolymorphism)(((const GradAutomaton*)(G)))
 
 // ================ static inliner ====================
 
