@@ -607,6 +607,30 @@ long _GradAutomatonGetDimStatus(const GradAutomaton* const that) {
 
 }
 
+// Return the flag isStable of the GradAutomaton 'that'
+#if BUILDMODE != 0
+static inline
+#endif
+bool _GradAutomatonIsStable(const GradAutomaton* const that) {
+
+#if BUILDMODE == 0
+  if (that == NULL) {
+
+    GradAutomatonErr->_type = PBErrTypeNullPointer;
+    sprintf(
+      GradAutomatonErr->_msg,
+      "'that' is null");
+    PBErrCatch(GradAutomatonErr);
+
+  }
+
+#endif
+
+  // Return the flag isStable
+  return that->isStable;
+
+}
+
 // -------------- GradAutomatonDummy
 
 // ================ Functions implementation ====================

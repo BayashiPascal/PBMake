@@ -442,6 +442,10 @@ typedef struct GradAutomaton {
   // GrAFun
   GrAFun* fun;
 
+  // Flag to memorize if the GradAutomaton is stable
+  // i.e., current step is same as previous step after GradAutomatonStep
+  bool isStable;
+
 } GradAutomaton;
 
 // ================ Functions declaration ====================
@@ -484,6 +488,12 @@ void _GradAutomatonSwitchAllStatus(GradAutomaton* const that);
 static inline
 #endif
 long _GradAutomatonGetDimStatus(const GradAutomaton* const that);
+
+// Return the flag isStable of the GradAutomaton 'that'
+#if BUILDMODE != 0
+static inline
+#endif
+bool _GradAutomatonIsStable(const GradAutomaton* const that);
 
 // -------------- GradAutomatonDummy
 
@@ -839,7 +849,7 @@ long GradAutomatonNeuraNetGetNbHiddenLayers(
 #define GradAutomatonSave(G, S, C) _Generic(G, \
   GradAutomatonWolframOriginal* : \
     _GradAutomatonWolframOriginalSave, \
-  const GradAutomatonWolframOriginal* :\
+  const GradAutomatonWolframOriginal* : \
     _GradAutomatonWolframOriginalSave, \
   GradAutomatonNeuraNet* : \
     _GradAutomatonNeuraNetSave, \
@@ -848,25 +858,28 @@ long GradAutomatonNeuraNetGetNbHiddenLayers(
   default: PBErrInvalidPolymorphism)(G, S, C)
 
 #define GradAutomatonLoad(G, S) _Generic(G, \
-  GradAutomatonWolframOriginal** : \
-    _GradAutomatonWolframOriginalLoad, \
-  GradAutomatonNeuraNet** : \
-    _GradAutomatonNeuraNetLoad, \
+  GradAutomatonWolframOriginal** : _GradAutomatonWolframOriginalLoad, \
+  GradAutomatonNeuraNet** : _GradAutomatonNeuraNetLoad, \
   default: PBErrInvalidPolymorphism)(G, S)
 
 #define GradAutomatonGetDimStatus(G) _Generic(G, \
-  GradAutomaton* : \
-    _GradAutomatonGetDimStatus, \
-  const GradAutomaton* :\
-    _GradAutomatonGetDimStatus, \
-  GradAutomatonWolframOriginal* : \
-    _GradAutomatonGetDimStatus, \
-  const GradAutomatonWolframOriginal* :\
-    _GradAutomatonGetDimStatus, \
-  GradAutomatonNeuraNet* : \
-    _GradAutomatonGetDimStatus, \
-  const GradAutomatonNeuraNet* :\
-    _GradAutomatonGetDimStatus, \
+  GradAutomaton* : _GradAutomatonGetDimStatus, \
+  const GradAutomaton* : _GradAutomatonGetDimStatus, \
+  GradAutomatonWolframOriginal* : _GradAutomatonGetDimStatus, \
+  const GradAutomatonWolframOriginal* : _GradAutomatonGetDimStatus, \
+  GradAutomatonNeuraNet* : _GradAutomatonGetDimStatus, \
+  const GradAutomatonNeuraNet* : _GradAutomatonGetDimStatus, \
+  default: PBErrInvalidPolymorphism)(((const GradAutomaton*)(G)))
+
+#define GradAutomatonIsStable(G) _Generic(G, \
+  GradAutomaton* : _GradAutomatonIsStable, \
+  const GradAutomaton* : _GradAutomatonIsStable, \
+  GradAutomatonDummy* : _GradAutomatonIsStable, \
+  const GradAutomatonDummy* : _GradAutomatonIsStable, \
+  GradAutomatonWolframOriginal* : _GradAutomatonIsStable, \
+  const GradAutomatonWolframOriginal* : _GradAutomatonIsStable, \
+  GradAutomatonNeuraNet* : _GradAutomatonIsStable, \
+  const GradAutomatonNeuraNet* : _GradAutomatonIsStable, \
   default: PBErrInvalidPolymorphism)(((const GradAutomaton*)(G)))
 
 // ================ static inliner ====================
