@@ -463,7 +463,7 @@ static inline
 #endif
 Grad* _GradAutomatonGrad(const GradAutomaton* const that);
 
-// Return the GrACellShort at position 'pos' for the
+// Return the GrACell at position 'pos' for the
 // GradAutomaton 'that'
 #if BUILDMODE != 0
 static inline
@@ -472,7 +472,7 @@ GrACell* _GradAutomatonCellPos(
      GradAutomaton* const that,
   const VecShort2D* const pos);
 
-// Return the GrACellShort at index 'iCell' for the GradAutomaton 'that'
+// Return the GrACell at index 'iCell' for the GradAutomaton 'that'
 #if BUILDMODE != 0
 static inline
 #endif
