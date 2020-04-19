@@ -212,6 +212,22 @@ typedef struct GANeuraNet {
   bool _flagMutableLink;
 } GANeuraNet;
 
+// Structures to save the history of the GenAlg
+typedef struct GAHistoryBirth {
+  // Epoch
+  unsigned long _epoch;
+  // First parent
+  unsigned long _idParents[2];
+  // Child
+  unsigned long _idChild;
+} GAHistoryBirth;
+typedef struct GAHistory {
+  // Set of GAHistoryBirth
+  GSet _genealogy;
+  // Path to the history file
+  char* _path;
+} GAHistory;
+
 typedef struct GenAlg {
   // GSet of GenAlgAdn, sortval == score so the head of the set is the 
   // worst adn and the tail of the set is the best
@@ -257,6 +273,10 @@ typedef struct GenAlg {
   int _nbMinAdn;
   // Nb max of adns
   int _nbMaxAdn;
+  // History of the GenAlg
+  GAHistory _history;
+  // Flag to remember if we are recording the history
+  bool _flagHistory;
 } GenAlg;
 
 // ================ Functions declaration ====================
@@ -516,6 +536,62 @@ bool GAGetNeuraNetLinkMutability(GenAlg* const that);
 static inline
 #endif
 bool GAGetFlagKTEvent(GenAlg* const that);
+
+// Create a static GAHistory
+GAHistory GAHistoryCreateStatic(void);
+
+// Free the memory used by the GAHistory 'that'
+void GAHistoryFree(GAHistory* that);
+
+// Add a birth to the history of the GenAlg 'that'
+#if BUILDMODE != 0
+static inline
+#endif
+void GAHistoryRecordBirth(GAHistory* const that, const unsigned int epoch,
+  const unsigned long idFather, const unsigned long idMother, 
+  const GenAlgAdn* child);
+
+// Set the history recording flag for the GenAlg 'that'
+#if BUILDMODE != 0
+static inline
+#endif
+void GASetFlagHistory(GenAlg* const that, const bool flag);
+
+// Set the path where the history is recorded for the GenAlg 'that'
+#if BUILDMODE != 0
+static inline
+#endif
+void GASetHistoryPath(GenAlg* const that, const char* const path);
+
+// Get the path where the history is recorded for the GenAlg 'that'
+#if BUILDMODE != 0
+static inline
+#endif
+const char* GAGetHistoryPath(GenAlg* const that);
+
+// Get the history recording flag for the GenAlg 'that'
+#if BUILDMODE != 0
+static inline
+#endif
+bool GAGetFlagHistory(const GenAlg* const that);
+
+// Save the history of the GenAlg 'that'
+// Return true if we could save the history, false else
+bool GASaveHistory(const GenAlg* const that);
+
+// Function which return the JSON encoding of the GAHistory 'that' 
+JSONNode* GAHistoryEncodeAsJSON(const GAHistory* const that);
+
+// Flush the content of the GAHistory 'that'
+void GAHistoryFlush(GAHistory* that);
+
+// Load the history into the GAHistory 'that' from the FILE 'stream'
+// Return true if we could load the history, false else
+bool GAHistoryLoad(GAHistory* const that, FILE* const stream);
+
+// Function which decode from JSON encoding 'json' to GAHistory 'that'
+bool GAHistoryDecodeAsJSON(GAHistory* const that,
+  const JSONNode* const json);
 
 // ================= Polymorphism ==================
 
