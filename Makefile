@@ -49,10 +49,16 @@ all:
 	for repo in $(LIST_REPOS); do if [ -d ../$$repo ]; then make -C ../$$repo all; fi; done;
 
 allDev: 
-	for repo in $(LIST_REPOS); do if [ -d ../$$repo ]; then make -C ../$$repo all BUILD_MODE=0; fi; done;
+	for repo in $(LIST_REPOS); do if [ -d ../$$repo ]; then make -C ../$$repo all BUILD_MODE=0 BUILDWITHGRAPHICLIB=0; fi; done;
 
 allRelease: 
-	for repo in $(LIST_REPOS); do if [ -d ../$$repo ]; then make -C ../$$repo all BUILD_MODE=1; fi; done;
+	for repo in $(LIST_REPOS); do if [ -d ../$$repo ]; then make -C ../$$repo all BUILD_MODE=1 BUILDWITHGRAPHICLIB=0; fi; done;
+
+allDevGtk: 
+	for repo in $(LIST_REPOS); do if [ -d ../$$repo ]; then make -C ../$$repo all BUILD_MODE=0 BUILDWITHGRAPHICLIB=1; fi; done;
+
+allReleaseGtk: 
+	for repo in $(LIST_REPOS); do if [ -d ../$$repo ]; then make -C ../$$repo all BUILD_MODE=1 BUILDWITHGRAPHICLIB=1; fi; done;
 
 clean:
 	for repo in $(LIST_REPOS); do if [ -d ../$$repo ]; then make -C ../$$repo clean; fi; done;
@@ -139,10 +145,16 @@ LIST_INCLUDE=\
 	../GradAutomaton/gradautomaton-inline.c \
 	
 
-libAll: libDev libRelease
+libAll: libDev libRelease libDevGtk libReleaseGtk
 
 libDev:
 	make allDev; rm -f Lib/libpbdev.a; ar -r Lib/libpbdev.a $(LIST_OBJ); rm -f Include/*; cp $(LIST_INCLUDE) Include/
 
 libRelease:
 	make allRelease; rm -f Lib/libpbrelease.a; ar -r Lib/libpbrelease.a $(LIST_OBJ); rm -f Include/*; cp $(LIST_INCLUDE) Include/
+
+libDevGtk:
+	make allDevGtk; rm -f Lib/libpbdevgtk.a; ar -r Lib/libpbdevgtk.a $(LIST_OBJ); rm -f Include/*; cp $(LIST_INCLUDE) Include/
+
+libReleaseGtk:
+	make allReleaseGtk; rm -f Lib/libpbreleasegtk.a; ar -r Lib/libpbreleasegtk.a $(LIST_OBJ); rm -f Include/*; cp $(LIST_INCLUDE) Include/
