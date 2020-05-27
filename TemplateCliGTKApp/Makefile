@@ -6,7 +6,7 @@ BUILD_MODE?=0
 
 # Path to PBMake
 
-PATH_PBMAKE=../../PBMake
+PATH_PBMAKE=../PBMake
 
 # Compiler arguments depending on BUILD_MODE
 
@@ -39,17 +39,11 @@ COMPILER=gcc-7
 
 all: clean main
 
-main: main.o gui.o Makefile
-	$(COMPILER) main.o gui.o $(LINK_ARG) $(GTK_LINK_ARG) -o main 
+main: main.o Makefile
+	$(COMPILER) main.o $(LINK_ARG) $(GTK_LINK_ARG) -o main 
 
-main.o: main.c gui.h Makefile
+main.o: main.c Makefile
 	$(COMPILER) $(BUILD_ARG) $(GTK_BUILD_ARG) -c main.c 
 
 clean:
 	rm -f *.o main
-
-gui.o: gui.c gui-callbacks.c gui.h Makefile
-	$(COMPILER) $(BUILD_ARG) $(GTK_BUILD_ARG) -c gui.c
-
-run:
-	main -root ./ -conf ./appConf.json

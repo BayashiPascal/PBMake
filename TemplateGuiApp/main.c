@@ -1,13 +1,25 @@
-#include "pbmath.h"
-#include "genbrush.h"
+#include "gui.h"
 
-int main() {
-  VecShort2D dim = VecShortCreateStatic2D();
-  VecSet(&dim, 0, 100);
-  VecSet(&dim, 1, 100);
-  GenBrush* gb = GBCreateImage(&dim);
-  GBSetFileName(gb, "./genealogy.tga");
-  GBRender(gb);
-  GBFree(&gb);
-  return 0;
+// Main function
+int main(
+     int argc,
+  char** argv) {
+
+  // Initialise the GTK library
+  gtk_init(
+    &argc,
+    &argv);
+
+  // Create the application
+  app =
+    GUICreate(
+      argc,
+      argv);
+
+  // Run the application
+  int status = GUIMain();
+
+  // Return the status at the end of the application
+  return status;
+
 }
