@@ -43,6 +43,7 @@ LIST_REPOS=\
 	CBo \
 	Cryptic \
 	GradAutomaton \
+	Smally \
 	
 
 all: 
@@ -90,6 +91,7 @@ LIST_OBJ=\
 	../CBo/cbo.o \
 	../Cryptic/cryptic.o \
 	../GradAutomaton/gradautomaton.o \
+	../Smally/smally.o \
 	
 
 LIST_INCLUDE=\
@@ -143,6 +145,8 @@ LIST_INCLUDE=\
 	../Cryptic/cryptic-inline.c \
 	../GradAutomaton/gradautomaton.h \
 	../GradAutomaton/gradautomaton-inline.c \
+	../Smally/smally.h \
+	../Smally/smally-inline.c \
 	
 
 libAll: libDev libRelease libDevGtk libReleaseGtk
