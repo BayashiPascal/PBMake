@@ -127,6 +127,8 @@ cryptic_wget:
 	if [ ! -d $(ROOT_DIR)/Cryptic ]; then wget https://github.com/BayashiPascal/Cryptic/archive/master.zip; unzip master.zip; rm -f master.zip; mv Cryptic-master $(ROOT_DIR)/Cryptic; fi
 gradautomaton_wget:
 	if [ ! -d $(ROOT_DIR)/GradAutomaton ]; then wget https://github.com/BayashiPascal/GradAutomaton/archive/master.zip; unzip master.zip; rm -f master.zip; mv GradAutomaton-master $(ROOT_DIR)/GradAutomaton; fi
+smally_wget:
+	if [ ! -d $(ROOT_DIR)/Smally ]; then wget https://github.com/BayashiPascal/Smally/archive/master.zip; unzip master.zip; rm -f master.zip; mv Smally-master $(ROOT_DIR)/Smally; fi
 
 # Definition of rules for each repository
 
