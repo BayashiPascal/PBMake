@@ -24,7 +24,13 @@ gboolean CbBtnActionClicked(
   (void)btn;
   (void)user_data;
 
-  printf("action\n");
+  // Start a thread
+  GThread* thread =
+    g_thread_new(
+      "threadWorker",
+      ThreadWorkerMain,
+      NULL);
+  g_thread_unref(thread);
 
   // Paint the GbWidget
   GBSurface* surf = GBSurf(appDraws.gbWidgetControl);
@@ -152,6 +158,12 @@ void CbGtkAppActivate(
 
   // Init the drawables
   GUIInitDrawables(gtkBuilder);
+
+  // Init the label for the thread data
+  appThreadLabel = GTK_LABEL(
+    gtk_builder_get_object(
+      gtkBuilder,
+      "lblThread"));
 
   // Init the callbacks
   GUIInitCallbacks(gtkBuilder);

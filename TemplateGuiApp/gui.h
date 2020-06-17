@@ -10,6 +10,12 @@
 #define appInp app.inputs
 #define appInpVal app.inputs.inpVal
 #define appDraws app.drawables
+#define appThreadLabel app.lblThread
+
+struct ThreadData {
+  GtkLabel *label;
+  int count;
+};
 
 typedef struct GUIWindows {
 
@@ -64,6 +70,9 @@ typedef struct GUI {
 
   // Windows
   GUIWindows windows;
+
+  // Label for the thread data
+  GtkLabel* lblThread;
 
   // Timer
   unsigned int timerId;
@@ -170,3 +179,9 @@ GUI GUICreate(
 
 // Main function of the application
 int GUIMain(void);
+
+// Thread worker main function
+gpointer ThreadWorkerMain(gpointer data);
+
+// Function to process the data from the thread worker
+gboolean processThreadWorkerData(gpointer data);

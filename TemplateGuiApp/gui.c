@@ -6,6 +6,12 @@ PBErr* AppErr = &thePBErr;
 // Declare the global instance of the application
 GUI app;
 
+// Mutex for the thread worker
+GMutex mutexThread;
+
+// Data of the thread
+struct ThreadData threadData;
+
 // Include the callbacks
 #include "gui-callbacks.c"
 
@@ -682,4 +688,52 @@ int GUIMain(void) {
   // Return the status code
   return status;
 
+}
+
+// Function to process the data from the thread worker
+gboolean processThreadWorkerData(gpointer data) {
+
+  // Lock the mutex
+  g_mutex_lock(&mutexThread);
+
+  // Process the data from the thread worker
+  struct ThreadData* threadData = (struct ThreadData*)data;
+  char buffer[100];
+  sprintf(
+    buffer,
+    "Data from thread: %d",
+    threadData->count);
+  gtk_label_set_text(
+    threadData->label,
+    buffer);
+
+  // Unlock the mutex
+  g_mutex_unlock(&mutexThread);
+
+  return FALSE;
+
+}
+
+// Thread worker main function
+gpointer ThreadWorkerMain(gpointer data) {
+
+  (void)data;
+
+  int count = 0;
+  while(count <= 5) {
+
+    // Simulate work
+    count++;
+    sleep(g_random_int_range (1, 4));
+    threadData.label = appThreadLabel;
+    threadData.count = count;
+
+    // Send data to the main thread
+    g_idle_add(
+      processThreadWorkerData,
+      &threadData);
+
+  }
+
+  return NULL;
 }
