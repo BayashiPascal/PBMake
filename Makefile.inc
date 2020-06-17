@@ -1211,6 +1211,7 @@ $(repo)_DEP_O:= \
 	$(pbjson_DEP_O) \
 	$(pbfilesys_DEP_O) \
 	$(genbrush_DEP_O) \
+	$(genalg_DEP_O) \
 	$(neuranet_DEP_O)
 # List of other dependencies for the repo
 $(repo)_DEP:= \
