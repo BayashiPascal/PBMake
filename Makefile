@@ -19,7 +19,6 @@ LIST_REPOS=\
 	GTree \
 	PBJson \
 	PBMath \
-	PBPointCloud \
 	BCurve \
 	Shapoid \
 	PBPhys \
@@ -71,7 +70,6 @@ LIST_OBJ=\
 	../GTree/gtree.o \
 	../PBJson/pbjson.o \
 	../PBMath/pbmath.o \
-	../PBPointCloud/pbpointcloud.o \
 	../BCurve/bcurve.o \
 	../Shapoid/shapoid.o \
 	../PBPhys/pbphys.o \
@@ -106,8 +104,6 @@ LIST_INCLUDE=\
 	../PBJson/pbjson-inline.c \
 	../PBMath/pbmath.h \
 	../PBMath/pbmath-inline.c \
-	../PBMath/pbpointcloud.h \
-	../PBMath/pbpointcloud-inline.c \
 	../BCurve/bcurve.h \
 	../BCurve/bcurve-inline.c \
 	../Shapoid/shapoid.h \
