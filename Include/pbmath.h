@@ -1695,6 +1695,24 @@ double GetAreaTriangleHero(
   const double b,
   const double c);
 
+// Return the Fibonacci sequence up to the 'n'-th element in a dynamically
+// allocated array of unsigned long
+unsigned long* GetFibonacciSeq(unsigned int n);
+
+// Return the Fibonacci grid lattice for the 'n'-th Fibonacci number in a
+// dynamically allocated array of pairs of float in [0,1]
+// Stores the nb of points in 'nbPoints'
+float* GetFibonacciGridLattice(
+    unsigned int n,
+  unsigned long* nbPoints);
+
+// Return the Fibonacci polar lattice for the 'n'-th Fibonacci number in a
+// dynamically allocated array of pairs of float in [-1,1]
+// Stores the nb of points in 'nbPoints'
+float* GetFibonacciPolarLattice(
+    unsigned int n,
+  unsigned long* nbPoints);
+
 // ================= Polymorphism ==================
 
 #define VecClone(Vec) _Generic(Vec, \
