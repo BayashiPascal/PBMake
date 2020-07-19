@@ -4176,3 +4176,99 @@ void QRDecompFreeStatic(QRDecomp* const that) {
   MatFree(&(that->_Q)); 
   MatFree(&(that->_R));
 }
+
+// Get the base of the Ratio 'that'
+#if BUILDMODE != 0 
+static inline 
+#endif 
+long RatioGetBase(const Ratio* that) {
+#if BUILDMODE == 0
+  if (that == NULL) {
+    PBMathErr->_type = PBErrTypeNullPointer;
+    sprintf(PBMathErr->_msg, "'that' is null");
+    PBErrCatch(PBMathErr);
+  }
+#endif
+  return that->_base;
+}
+
+// Get the numerator of the Ratio 'that'
+#if BUILDMODE != 0 
+static inline 
+#endif 
+unsigned int RatioGetNumerator(const Ratio* that) {
+#if BUILDMODE == 0
+  if (that == NULL) {
+    PBMathErr->_type = PBErrTypeNullPointer;
+    sprintf(PBMathErr->_msg, "'that' is null");
+    PBErrCatch(PBMathErr);
+  }
+#endif
+  return that->_numerator;
+}
+
+// Get the denominator of the Ratio 'that'
+#if BUILDMODE != 0 
+static inline 
+#endif 
+unsigned int  RatioGetDenominator(const Ratio* that) {
+#if BUILDMODE == 0
+  if (that == NULL) {
+    PBMathErr->_type = PBErrTypeNullPointer;
+    sprintf(PBMathErr->_msg, "'that' is null");
+    PBErrCatch(PBMathErr);
+  }
+#endif
+  return that->_denominator;
+}
+
+// Set the base of the Ratio 'that' to 'v'
+#if BUILDMODE != 0 
+static inline 
+#endif 
+void RatioSetBase(Ratio* that, long v) {
+#if BUILDMODE == 0
+  if (that == NULL) {
+    PBMathErr->_type = PBErrTypeNullPointer;
+    sprintf(PBMathErr->_msg, "'that' is null");
+    PBErrCatch(PBMathErr);
+  }
+#endif
+  that->_base = v;
+}
+
+// Set the numerator of the Ratio 'that' to 'v'
+#if BUILDMODE != 0 
+static inline 
+#endif 
+void RatioSetNumerator(Ratio* that, unsigned int v) {
+#if BUILDMODE == 0
+  if (that == NULL) {
+    PBMathErr->_type = PBErrTypeNullPointer;
+    sprintf(PBMathErr->_msg, "'that' is null");
+    PBErrCatch(PBMathErr);
+  }
+#endif
+  that->_numerator = v;
+}
+
+// Set the denominator of the Ratio 'that' to 'v'
+#if BUILDMODE != 0 
+static inline 
+#endif 
+void RatioSetDenominator(Ratio* that, unsigned int v) {
+#if BUILDMODE == 0
+  if (that == NULL) {
+    PBMathErr->_type = PBErrTypeNullPointer;
+    sprintf(PBMathErr->_msg, "'that' is null");
+    PBErrCatch(PBMathErr);
+  }
+  if (v == 0) {
+    PBMathErr->_type = PBErrTypeInvalidArg;
+    sprintf(PBMathErr->_msg, "'v' is invalid (%u > 0)", v);
+    PBErrCatch(PBMathErr);
+  }
+#endif
+  that->_denominator = v;
+}
+
