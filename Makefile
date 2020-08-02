@@ -44,6 +44,7 @@ LIST_REPOS=\
 	Cryptic \
 	GradAutomaton \
 	Smally \
+	Buzzy \
 	
 
 all: 
@@ -92,6 +93,7 @@ LIST_OBJ=\
 	../Cryptic/cryptic.o \
 	../GradAutomaton/gradautomaton.o \
 	../Smally/smally.o \
+	../Buzzy/buzzy.o \
 	
 
 LIST_INCLUDE=\
@@ -147,6 +149,8 @@ LIST_INCLUDE=\
 	../GradAutomaton/gradautomaton-inline.c \
 	../Smally/smally.h \
 	../Smally/smally-inline.c \
+	../Buzzy/buzzy.h \
+	../Buzzy/buzzy-inline.c \
 	
 
 libAll: libDev libRelease libDevGtk libReleaseGtk
