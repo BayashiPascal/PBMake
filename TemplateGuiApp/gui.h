@@ -2,6 +2,7 @@
 #include "pbjson.h"
 #include "pbmath.h"
 #include "genbrush.h"
+#include "buzzy.h"
 #include <gtk/gtk.h>
 
 #define appWins app.windows
@@ -85,6 +86,9 @@ typedef struct GUI {
 
 // Declare the global instance of the application
 extern GUI app;
+
+// Declare the global Buzzy instance to generate sounds
+extern Buzzy buzzy;
 
 // Callback for the timer
 gboolean CbTimer(gpointer data);
@@ -185,3 +189,7 @@ gpointer ThreadWorkerMain(gpointer data);
 
 // Function to process the data from the thread worker
 gboolean processThreadWorkerData(gpointer data);
+
+// Thread worker sound function
+gpointer ThreadSoundMain(gpointer data);
+

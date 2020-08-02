@@ -76,6 +76,28 @@ gboolean CbBtnActionClicked(
 
 }
 
+// Callback function for the 'clicked' event on the sound button
+gboolean CbBtnSoundClicked(
+  GtkButton* btn,
+    gpointer user_data) {
+
+  // Unused argument
+  (void)btn;
+  (void)user_data;
+
+  // Start a thread
+  GThread* thread =
+    g_thread_new(
+      "threadSound",
+      ThreadSoundMain,
+      NULL);
+  g_thread_unref(thread);
+
+  // Return true to stop the callback chain
+  return TRUE;
+
+}
+
 // Callback function for the 'clicked' event on the quit button
 gboolean CbBtnQuitClicked(
   GtkButton* btn,

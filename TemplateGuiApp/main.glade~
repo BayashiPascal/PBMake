@@ -50,6 +50,18 @@
           </packing>
         </child>
         <child>
+          <object class="GtkLabel" id="lblThread">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">label</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">3</property>
+          </packing>
+        </child>
+        <child>
           <placeholder/>
         </child>
       </object>

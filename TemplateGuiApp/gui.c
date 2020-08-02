@@ -6,6 +6,9 @@ PBErr* AppErr = &thePBErr;
 // Declare the global instance of the application
 GUI app;
 
+// Declare the global Buzzy instance to generate sounds
+Buzzy buzzy;
+
 // Mutex for the thread worker
 GMutex mutexThread;
 
@@ -120,6 +123,10 @@ void GUIQuit(void) {
   // Quit the application at G level
   g_application_quit(app.gApp);
 
+  // Free the Buzzy
+  BuzzyClose(&buzzy);
+  BuzzyFreeStatic(&buzzy);
+
 }
 
 // Function to init the callbacks
@@ -163,6 +170,18 @@ void GUIInitCallbacks(GtkBuilder* const gtkBuilder) {
     btnAction,
     "clicked",
     G_CALLBACK(CbBtnActionClicked),
+    NULL);
+
+  // Set the callback on the 'clicked' event of the sound button
+  obj =
+    gtk_builder_get_object(
+      gtkBuilder,
+      "btnSound");
+  GtkWidget* btnSound = GTK_WIDGET(obj);
+  g_signal_connect(
+    btnSound,
+    "clicked",
+    G_CALLBACK(CbBtnSoundClicked),
     NULL);
 
   // Set the callback on the 'clicked' event of the quit button
@@ -734,6 +753,20 @@ gpointer ThreadWorkerMain(gpointer data) {
       &threadData);
 
   }
+
+  return NULL;
+}
+
+// Thread sound main function
+gpointer ThreadSoundMain(gpointer data) {
+
+  (void)data;
+
+  // Play a sound
+  BuzzyPlaySingleLinerarDecreasingNote(
+    &buzzy,
+    2000.0,
+    BUZZY_A4);
 
   return NULL;
 }

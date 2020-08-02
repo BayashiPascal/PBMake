@@ -5,6 +5,15 @@ int main(
      int argc,
   char** argv) {
 
+  // Initialise the Buzzy
+  buzzy = BuzzyCreateStatic();
+  BuzzySetFormat(
+    &buzzy, 
+    16,
+    44100,
+    2);
+  BuzzyOpen(&buzzy);
+
   // Initialise the GTK library
   gtk_init(
     &argc,

@@ -29,7 +29,7 @@ GTKLINK=`pkg-config --libs gtk+-3.0`
 CAIROPARAM=`pkg-config --cflags cairo`
 CAIROLINK=`pkg-config --libs cairo`
 GTK_BUILD_ARG:=$(GTKPARAM) $(CAIROPARAM)
-GTK_LINK_ARG:=-lm $(GTKLINK) $(CAIROLINK)
+GTK_LINK_ARG:=-lao -ldl -lm $(GTKLINK) $(CAIROLINK)
 
 # Compiler
 
