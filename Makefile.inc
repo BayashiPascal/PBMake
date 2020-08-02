@@ -1767,6 +1767,7 @@ $(repo)_INC_H_EXE:= \
 # List of directories from where include headers
 $(repo)_INC_DIR:= \
 	-I$($(repo)_DIR) \
+	$(ROOT_DIR)/../libao-1.2.0/include/ \
 	$(pberr_INC_DIR)
 # List of object dependencies for the repo
 $(repo)_DEP_O:= \
@@ -1781,7 +1782,7 @@ $(repo)_EXE_DEP:= \
 	$($(repo)_DEP_O)
 # List of other arguments for this repository
 $(repo)_BUILD_ARG:= 
-$(repo)_LINK_ARG:=-lm
+$(repo)_LINK_ARG:= -lao -ldl -lm
 # Shared .o
 $(repo).o: \
 		$($(repo)_DIR)/$(repo).c \
