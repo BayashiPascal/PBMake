@@ -156,13 +156,13 @@ LIST_INCLUDE=\
 libAll: libDev libRelease libDevGtk libReleaseGtk
 
 libDev:
-	make allDev; rm -f Lib/libpbdev.a; ar -r Lib/libpbdev.a $(LIST_OBJ); rm -f Include/*; cp $(LIST_INCLUDE) Include/
+	make allDev; mkdir -p Lib/`uname -m`; rm -f Lib/`uname -m`/libpbdev.a; ar -r Lib/`uname -m`/libpbdev.a $(LIST_OBJ); rm -f Include/*; cp $(LIST_INCLUDE) Include/
 
 libRelease:
-	make allRelease; rm -f Lib/libpbrelease.a; ar -r Lib/libpbrelease.a $(LIST_OBJ); rm -f Include/*; cp $(LIST_INCLUDE) Include/
+	make allRelease; mkdir -p Lib/`uname -m`; rm -f Lib/`uname -m`/libpbrelease.a; ar -r Lib/`uname -m`/libpbrelease.a $(LIST_OBJ); rm -f Include/*; cp $(LIST_INCLUDE) Include/
 
 libDevGtk:
-	make allDevGtk; rm -f Lib/libpbdevgtk.a; ar -r Lib/libpbdevgtk.a $(LIST_OBJ); rm -f Include/*; cp $(LIST_INCLUDE) Include/
+	make allDevGtk; mkdir -p Lib/`uname -m`; rm -f Lib/`uname -m`/libpbdevgtk.a; ar -r Lib/`uname -m`/libpbdevgtk.a $(LIST_OBJ); rm -f Include/*; cp $(LIST_INCLUDE) Include/
 
 libReleaseGtk:
-	make allReleaseGtk; rm -f Lib/libpbreleasegtk.a; ar -r Lib/libpbreleasegtk.a $(LIST_OBJ); rm -f Include/*; cp $(LIST_INCLUDE) Include/
+	make allReleaseGtk; mkdir -p Lib/`uname -m`; rm -f Lib/`uname -m`/libpbreleasegtk.a; ar -r Lib/`uname -m`/libpbreleasegtk.a $(LIST_OBJ); rm -f Include/*; cp $(LIST_INCLUDE) Include/
