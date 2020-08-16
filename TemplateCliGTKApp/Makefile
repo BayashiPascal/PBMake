@@ -6,7 +6,7 @@ BUILD_MODE?=0
 
 # Path to PBMake
 
-PATH_PBMAKE=../PBMake
+PATH_PBMAKE=../../PBMake
 
 # Compiler arguments depending on BUILD_MODE
 
