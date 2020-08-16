@@ -29,6 +29,8 @@ GenBrush* GBScale(const GenBrush* const that,
   const VecShort2D* const dim, const GBScaleMethod scaleMethod);
 void GBFree(GenBrush** that);
 VecShort2D* GBDim(const GenBrush* const that);
+void _GDSGenBrushPairRemoveAllSample();
+void _GDSGenBrushPairAddSample();
 #endif
 
 // ================= Define ==================
@@ -118,6 +120,7 @@ void GDataSetFreeStatic(GDataSet* const that);
 // Load the GDataSet 'that' from the stream 'stream'
 // Return true if the GDataSet could be loaded, false else
 bool GDataSetLoad(GDataSet* that, FILE* const stream);
+bool _GDSLoad(GDataSet* that, FILE* const stream);
 
 // Function which decode from JSON encoding 'json' to 'that'
 bool GDataSetDecodeAsJSON(GDataSet* that, const JSONNode* const json);
@@ -303,6 +306,9 @@ void GDSNormalize(GDataSetVecFloat* const that);
 // Get the mean of the GDataSet 'that'
 VecFloat* GDSGetMean(const GDataSetVecFloat* const that);
 
+// Get the max of the GDataSet 'that'
+VecFloat* GDSGetMax(const GDataSetVecFloat* const that);
+
 // Get a clone of the GDataSet 'that'
 // All the data in the GDataSet are cloned except for the splitting
 // categories which are reset to one category made of the original data
@@ -355,25 +361,98 @@ bool GDSVecFloatSaveCategory(
 
 // Run the prediction by the NeuraNet 'nn' on each sample of the category
 // 'iCat' of the GDataSet 'that'. The index of columns in the samples
-// for inputs and outputs are given by 'inputs' and 'outputs'.
-// input values in [-1,1] and output values in [-1,1]
+// for inputs and outputs are given by 'iInputs' and 'iOutputs'.
 // Stop the prediction of samples when the result can't get better
-// than 'threhsold'
+// than 'threshold'
 // Return the value of the NeuraNet on the predicted samples, defined
 // as sum_samples(||output_sample-output_neuranet||)/nb_sample
 // Higher is better, 0.0 is best value
 float GDataSetVecFloatEvaluateNN(
   const GDataSetVecFloat* const that, 
   const NeuraNet* const nn, 
-  const long iCat, 
+  const int iCat, 
   const VecShort* const iInputs,
   const VecShort* const iOutputs,
   const float threshold);
 
 // Create a new GDataSetVecFloat
-GDataSetVecFloat GDataSetVecFloatCreateStatic();
+GDataSetVecFloat GDataSetVecFloatCreateStatic(void);
+
+// Remove all the samples of the GDataSetVecFloat 'that'
+#if BUILDMODE != 0
+static inline
+#endif
+void _GDSVecFloatRemoveAllSample(GDataSetVecFloat* const that);
+
+// Remove all the samples of the GDataSetGenBrushPair 'that'
+#ifdef GENBRUSH_H
+#if BUILDMODE != 0
+static inline
+#endif 
+void _GDSGenBrushPairRemoveAllSample(GDataSetGenBrushPair* const that);
+#endif 
+
+// Append 'sample' in the GDataSetVecFloat 'that'
+#if BUILDMODE != 0
+static inline
+#endif 
+void _GDSVecFloatAddSample(
+  GDataSetVecFloat* const that,
+  VecFloat* sample);
+
+// Append 'sample' in the GDataSetGenBrush 'that'
+#ifdef GENBRUSH_H
+#if BUILDMODE != 0
+static inline
+#endif 
+void _GDSGenBrushPairAddSample(
+  GDataSetGenBrushPair* const that,
+  GDSGenBrushPair* sample);
+#endif 
+
+// Get the proximity matrix of the samples of category 'iCat' in the
+// GDataSetVecFloat 'that'
+// M[i,j] = euclidean distance between the i-th sample and the j-th sample
+MatFloat* GDSVecFloatGetProxMat(
+  const GDataSetVecFloat* that,
+             unsigned int iCat);
+
+// Get the nearest (in term of euclidean distance) sample of category
+// 'iCat' to 'target' in the GDataSetVecFloat 'that' using the AESA
+// nearest neighbour search
+// TODO: should use a lookup table to get VecDist(sample, prevCandidate)
+// but it's complicated by the fact I'm loosing the index of samples when
+// using GSet
+// Also, even if using a lookup table, and even if AESA actually reduces
+// efficiently the number of VecDist(candidate, target), the cost of 
+// VecDist() much be hugely bigger than the one of using a lookup table
+// to make AESA relevant. It's probably meaningless on a VecFloat,
+// maybe more meaningful on a GenBrush ?
+// http://citeseerx.ist.psu.edu/viewdoc/download?
+// doi=10.1.1.481.2200&rep=rep1&type=pdf
+VecFloat* GDSVecFloatNearestNeighbourAESA(
+  const GDataSetVecFloat* that,
+          const VecFloat* target,
+                      int iCat);
+
+// Get the nearest (in term of euclidean distance) sample of category
+// 'iCat' to 'target' in the GDataSetVecFloat 'that' using brute force
+VecFloat* GDSVecFloatNearestNeighbourBrute(
+  const GDataSetVecFloat* that,
+          const VecFloat* target,
+                      int iCat);
 
 // ================= Polymorphism ==================
+
+#define GDSRemoveAllSample(DataSet) _Generic(DataSet, \
+  GDataSetVecFloat*: _GDSVecFloatRemoveAllSample, \
+  GDataSetGenBrushPair*: _GDSGenBrushPairRemoveAllSample, \
+  default: PBErrInvalidPolymorphism)(DataSet)
+
+#define GDSAddSample(DataSet, Sample) _Generic(DataSet, \
+  GDataSetVecFloat*: _GDSVecFloatAddSample, \
+  GDataSetGenBrushPair*: _GDSGenBrushPairAddSample, \
+  default: PBErrInvalidPolymorphism)(DataSet, Sample)
 
 #define GDSDesc(DataSet) _Generic(DataSet, \
   GDataSet*: _GDSDesc, \
@@ -461,7 +540,7 @@ GDataSetVecFloat GDataSetVecFloatCreateStatic();
   const GDataSetVecFloat*: _GDSResetAll, \
   GDataSetGenBrushPair*: _GDSResetAll, \
   const GDataSetGenBrushPair*: _GDSResetAll, \
-  default: PBErrInvalidPolymorphism)((const GDataSet*)DataSet)
+  default: PBErrInvalidPolymorphism)((GDataSet*)DataSet)
 
 #define GDSSampleDim(DataSet) _Generic(DataSet, \
   GDataSet*: _GDSSampleDim, \
@@ -525,6 +604,23 @@ GDataSetVecFloat GDataSetVecFloatCreateStatic();
   const GDataSetVecFloat*: GDataSetVecFloatEvaluateNN, \
   default: PBErrInvalidPolymorphism)( \
     GDS, NN, Cat, Inputs, Outputs, Threshold)
+
+#define GDSLoad(DataSet, FP) _Generic(DataSet, \
+  GDataSet*: GDataSetLoad, \
+  GDataSetVecFloat*: _GDSLoad, \
+  GDataSetGenBrushPair*: _GDSLoad, \
+  default: PBErrInvalidPolymorphism)((GDataSet*)DataSet, FP)
+
+#define GDSGetProxMat(DataSet, Cat) _Generic(DataSet, \
+  GDataSetVecFloat*: GDSVecFloatGetProxMat, \
+  const GDataSetVecFloat*: GDSVecFloatGetProxMat, \
+  default: PBErrInvalidPolymorphism)(DataSet, Cat)
+
+#define GDSNearestNeighbour(DataSet, Target, ICat) \
+  _Generic(DataSet, \
+    GDataSetVecFloat*: GDSVecFloatNearestNeighbourBrute, \
+    const GDataSetVecFloat*: GDSVecFloatNearestNeighbourBrute, \
+    default: PBErrInvalidPolymorphism)(DataSet, Target, ICat)
 
 // ================ static inliner ====================
 

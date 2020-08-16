@@ -44,6 +44,8 @@ typedef struct GenAlg GenAlg;
 typedef struct GenAlgAdn {
   // ID
   unsigned long _id;
+  // ID parents
+  unsigned long _idParents[2];
   // Age
   unsigned long _age;
   // Adn for floating point value
@@ -91,7 +93,7 @@ VecLong* GAAdnAdnI(const GenAlgAdn* const that);
 
 // Initialise randomly the genes of the GenAlgAdn 'that' of the 
 // GenAlg 'ga' according to the type of the GenAlg
-void GAAdnInit(const GenAlgAdn* const that, const GenAlg* ga);
+void GAAdnInit(GenAlgAdn* const that, const GenAlg* ga);
 
 // Initialise randomly the genes of the GenAlgAdn 'that' of the 
 // GenAlg 'ga', version used to calculate the parameters of a NeuraNet
@@ -196,7 +198,8 @@ void GAAdnSetMutabilityFloat(GenAlgAdn* const that,
 typedef enum GenAlgType {
   genAlgTypeDefault,
   genAlgTypeNeuraNet,
-  genAlgTypeNeuraNetConv
+  genAlgTypeNeuraNetConv,
+  genAlgTypeMorpheus
 } GenAlgType;
 
 // Data used when GenAlg is applied to a NeuraNet
@@ -211,6 +214,30 @@ typedef struct GANeuraNet {
   // Flag to memorize if the links of the NeuraNet can be modified
   bool _flagMutableLink;
 } GANeuraNet;
+
+// Data used when GenAlg is applied to a Morpheus
+typedef struct GAMorpheus {
+  unsigned int _nbBase;
+  long* _iBases;
+  const VecFloat* _bases;
+  const VecLong* _links;
+} GAMorpheus;
+
+// Structures to save the history of the GenAlg
+typedef struct GAHistoryBirth {
+  // Epoch
+  unsigned long _epoch;
+  // First parent
+  unsigned long _idParents[2];
+  // Child
+  unsigned long _idChild;
+} GAHistoryBirth;
+typedef struct GAHistory {
+  // Set of GAHistoryBirth
+  GSet _genealogy;
+  // Path to the history file
+  char* _path;
+} GAHistory;
 
 typedef struct GenAlg {
   // GSet of GenAlgAdn, sortval == score so the head of the set is the 
@@ -240,8 +267,12 @@ typedef struct GenAlg {
   float _normRangeInt;
   // Data used if the GenAlg is applied to a NeuraNet
   GANeuraNet _NNdata;
+  // Data used if the GenAlg is applied to a Morpheus
+  GAMorpheus _MorpheusData;
   // Number of ktevent
   unsigned long _nbKTEvent;
+  // Flag to memorize if there has been a KT event during last call to GAStep
+  bool _flagKTEvent;
   // Flag to remember if we display info via a TextOMeter 
   // about the population
   bool _flagTextOMeter;
@@ -255,6 +286,12 @@ typedef struct GenAlg {
   int _nbMinAdn;
   // Nb max of adns
   int _nbMaxAdn;
+  // History of the GenAlg
+  GAHistory _history;
+  // Flag to remember if we are recording the history
+  bool _flagHistory;
+  // Maximum age for an entity
+  unsigned long _maxAge;
 } GenAlg;
 
 // ================ Functions declaration ====================
@@ -295,6 +332,15 @@ static inline
 void GASetTypeNeuraNetConv(GenAlg* const that, const int nbIn, 
   const int nbHid, const int nbOut, const long nbBaseConv,
   const long nbBaseCellConv, const long nbLink);
+
+// Set the type of the GenAlg 'that' to genAlgTypeMorpheus, the GenAlg
+// will be used with the Morpheus type of learning on the 'nbBase' bases
+// indicated by their indices 'iBases', and the 'bases' and 'links' as
+// initialisation values
+#if BUILDMODE != 0
+static inline
+#endif
+void GASetTypeMorpheus(GenAlg* const that, unsigned int nbBase, long* iBases, const VecFloat* bases, const VecLong* links);
 
 // Return the GSet of the GenAlg 'that'
 #if BUILDMODE != 0
@@ -507,6 +553,80 @@ void GASetNeuraNetLinkMutability(GenAlg* const that, const bool flag);
 static inline
 #endif
 bool GAGetNeuraNetLinkMutability(GenAlg* const that);
+
+// Get the flag about KTEvent at last call of GAStep for
+// the GenAlg 'that'
+#if BUILDMODE != 0
+static inline
+#endif
+bool GAGetFlagKTEvent(GenAlg* const that);
+
+// Create a static GAHistory
+GAHistory GAHistoryCreateStatic(void);
+
+// Free the memory used by the GAHistory 'that'
+void GAHistoryFree(GAHistory* that);
+
+// Add a birth to the history of the GenAlg 'that'
+#if BUILDMODE != 0
+static inline
+#endif
+void GAHistoryRecordBirth(GAHistory* const that, const GenAlgAdn* child,
+  const unsigned int epoch);
+
+// Set the history recording flag for the GenAlg 'that'
+#if BUILDMODE != 0
+static inline
+#endif
+void GASetFlagHistory(GenAlg* const that, const bool flag);
+
+// Set the path where the history is recorded for the GenAlg 'that'
+#if BUILDMODE != 0
+static inline
+#endif
+void GASetHistoryPath(GenAlg* const that, const char* const path);
+
+// Get the path where the history is recorded for the GenAlg 'that'
+#if BUILDMODE != 0
+static inline
+#endif
+const char* GAGetHistoryPath(GenAlg* const that);
+
+// Get the history recording flag for the GenAlg 'that'
+#if BUILDMODE != 0
+static inline
+#endif
+bool GAGetFlagHistory(const GenAlg* const that);
+
+// Save the history of the GenAlg 'that'
+// Return true if we could save the history, false else
+bool GASaveHistory(const GenAlg* const that);
+
+// Function which return the JSON encoding of the GAHistory 'that' 
+JSONNode* GAHistoryEncodeAsJSON(const GAHistory* const that);
+
+// Flush the content of the GAHistory 'that'
+void GAHistoryFlush(GAHistory* that);
+
+// Load the history into the GAHistory 'that' from the FILE 'stream'
+// Return true if we could load the history, false else
+bool GAHistoryLoad(GAHistory* const that, FILE* const stream);
+
+// Function which decode from JSON encoding 'json' to GAHistory 'that'
+bool GAHistoryDecodeAsJSON(GAHistory* const that,
+  const JSONNode* const json);
+
+// Set the maximum age for an entity of the GenAlg 'that'
+#if BUILDMODE != 0
+static inline
+#endif
+void GASetMaxAge(GenAlg* const that, const unsigned long age);
+
+// Get the maximum age for an entity of the GenAlg 'that'
+#if BUILDMODE != 0
+static inline
+#endif
+unsigned long GAGetMaxAge(GenAlg* const that);
 
 // ================= Polymorphism ==================
 

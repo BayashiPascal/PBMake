@@ -10,6 +10,7 @@
 #include <math.h>
 #include <string.h>
 #include <stdbool.h>
+#include <stddef.h>
 #include "pberr.h"
 #include "pbjson.h"
 
@@ -1655,6 +1656,37 @@ static inline
 #endif 
 void _SLESetV(SysLinEq* const that, const VecFloat* const v);
 
+// -------------- Ratio
+
+// ================= Data structure ===================
+
+// Linear system of equalities
+typedef struct Ratio {
+
+  // Components
+  long _base;
+  unsigned int _numerator;
+  unsigned int _denominator;
+
+} Ratio;
+
+// ================ Functions declaration ====================
+
+// Create a new static Ratio
+Ratio RatioCreateStatic(long b, unsigned int n, unsigned int d);
+
+// Convert the float 'v' into the nearest Ratio using the Farey's algorithm
+// given the precision 'prec'
+Ratio RatioFromFloatPrec(float v, float prec);
+#define RatioFromFloat(v) RatioFromFloatPrec((v), PBMATH_EPSILON)
+
+// Convert the Ratio 'that' into a float
+float RatioToFloat(const Ratio* that);
+
+// Reduce the fractional part of the Ratio 'that' and update the base such as
+// numerator < denominator
+void RatioReduce(Ratio* that);
+
 // -------------- Usefull basic functions
 
 // ================ Functions declaration ====================
@@ -1693,6 +1725,68 @@ double GetAreaTriangleHero(
   const double a,
   const double b,
   const double c);
+
+// Return the Fibonacci sequence up to the 'n'-th element in a dynamically
+// allocated array of unsigned long
+unsigned long* GetFibonacciSeq(unsigned int n);
+
+// Return the Fibonacci grid lattice for the 'n'-th Fibonacci number in a
+// dynamically allocated array of pairs of float in [0,1]
+// Stores the nb of points in 'nbPoints'
+float* GetFibonacciGridLattice(
+    unsigned int n,
+  unsigned long* nbPoints);
+
+// Return the Fibonacci polar lattice for the 'n'-th Fibonacci number in a
+// dynamically allocated array of pairs of float in [-1,1]
+// Stores the nb of points in 'nbPoints'
+float* GetFibonacciPolarLattice(
+    unsigned int n,
+  unsigned long* nbPoints);
+
+// Return the greatest common divisor using the Stein's algorithm
+// https://en.wikipedia.org/wiki/Binary_GCD_algorithm
+unsigned int GetGCD(unsigned int u, unsigned int v);
+
+// Get the base of the Ratio 'that'
+#if BUILDMODE != 0 
+static inline 
+#endif 
+long RatioGetBase(const Ratio* that);
+
+// Get the numerator of the Ratio 'that'
+#if BUILDMODE != 0 
+static inline 
+#endif 
+unsigned int RatioGetNumerator(const Ratio* that);
+
+// Get the denominator of the Ratio 'that'
+#if BUILDMODE != 0 
+static inline 
+#endif 
+unsigned int RatioGetDenominator(const Ratio* that);
+
+// Set the base of the Ratio 'that' to 'v'
+#if BUILDMODE != 0 
+static inline 
+#endif 
+void RatioSetBase(Ratio* that, long v);
+
+// Set the numerator of the Ratio 'that' to 'v'
+#if BUILDMODE != 0 
+static inline 
+#endif 
+void RatioSetNumerator(Ratio* that, unsigned int v);
+
+// Set the denominator of the Ratio 'that' to 'v'
+#if BUILDMODE != 0 
+static inline 
+#endif 
+void RatioSetDenominator(Ratio* that, unsigned int v);
+
+// Print the Ratio on 'stream' as a+b/c
+void RatioPrint(const Ratio* that, FILE* stream);
+#define RatioPrintln(R, S) do{RatioPrint(R,S);fprintf(S,"\n");}while(0)
 
 // ================= Polymorphism ==================
 
