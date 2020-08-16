@@ -89,7 +89,8 @@ typedef struct GBPixel {
 typedef enum GBLayerBlendMode {
   GBLayerBlendModeDefault, // Simple overwritting
   GBLayerBlendModeNormal, // Blending according to relative alpha
-  GBLayerBlendModeOver // Blending according to alpha of top pix
+  GBLayerBlendModeOver, // Blending according to alpha of top pix
+  GBLayerBlendModeAverage // Average of stacked pixels
 } GBLayerBlendMode;
 
 typedef enum GBLayerStackPosition {
@@ -237,7 +238,8 @@ typedef struct GBHandDefault {
 } GBHandDefault;
 
 typedef enum GBToolType {
-  GBToolTypePlotter
+  GBToolTypePlotter,
+  GBToolTypePen
 } GBToolType;
 
 typedef struct GBTool {
@@ -249,6 +251,17 @@ typedef struct GBToolPlotter {
   // Parent
   GBTool _tool;
 } GBToolPlotter;
+
+typedef struct GBToolPen {
+  // Parent
+  GBTool _tool;
+  // Shape of the pen
+  Shapoid* _shape;
+  // Softness of the pen
+  // bigger than 0.0, the bigger the softener the pen is, used as
+  // second argument of pow(...)
+  float _softness;
+} GBToolPen;
 
 typedef enum GBInkType {
   GBInkTypeSolid
@@ -838,8 +851,6 @@ void GBSurfaceImageSetFileName(GBSurfaceImage* const that,
 // Save a GBSurfaceImage 'that'
 // If the filename is not set do nothing and return false
 // Return true if it could save the surface, false else
-// For any other format than tga the surface is first saved in a temporary
-// file /tmp/genbrush.tga and then converted using the 'convert' command
 bool GBSurfaceImageSave(const GBSurfaceImage* const that);
 
 // Create a new GBSurfaceImage with one layer containing the content 
@@ -1074,6 +1085,44 @@ void GBToolPlotterFree(GBToolPlotter** that);
 // Draw the object in the GBObjPod 'pod' with the GBToolPlotter 'that'
 void GBToolPlotterDraw(const GBToolPlotter* const that, 
   const GBObjPod* const pod);
+
+// ---------------- GBToolPen --------------------------
+
+// Create a new GBToolPen with the given 'shape' and default
+// 'softness' value of 1.0
+GBToolPen* GBToolPenCreate(const Shapoid* shape);
+
+// Free the memory used by the GBToolPen 'that'
+void GBToolPenFree(GBToolPen** that);
+
+// Draw the object in the GBObjPod 'pod' with the GBToolPen 'that'
+void GBToolPenDraw(const GBToolPen* const that, 
+  const GBObjPod* const pod);
+
+// Function to get the shape of GBToolPen 'that'
+#if BUILDMODE != 0
+static inline
+#endif 
+Shapoid* GBToolPenShape(const GBToolPen* that);
+
+// Function to set the shape of GBToolPen 'that' to a clone of 'shape'
+#if BUILDMODE != 0
+static inline
+#endif 
+void GBToolPenSetShape(GBToolPen* that, const Shapoid* shape);
+
+// Function to get the softness of GBToolPen 'that'
+#if BUILDMODE != 0
+static inline
+#endif 
+float GBToolPenGetSoftness(const GBToolPen* that);
+
+// Function to set the softness of GBToolPen 'that' to 'softness'
+// 'softness' > 0.0, the bigger the softener the pen is
+#if BUILDMODE != 0
+static inline
+#endif 
+void GBToolPenSetSoftness(GBToolPen* that, float softness);
 
 // ---------------- GBInk --------------------------
 
@@ -2017,8 +2066,10 @@ float GBGetSimilarity(const GenBrush* const gbA, GenBrush* const gbB);
 #define GBToolDraw(Tool, Pod) _Generic(Tool, \
   GBTool*: _GBToolDraw, \
   GBToolPlotter*: GBToolPlotterDraw, \
+  GBToolPen*: GBToolPenDraw, \
   const GBTool*: _GBToolDraw, \
   const GBToolPlotter*: GBToolPlotterDraw, \
+  const GBToolPen*: GBToolPenDraw, \
   default: PBErrInvalidPolymorphism) (Tool, Pod)
   
 #if BUILDWITHGRAPHICLIB == 0

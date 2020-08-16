@@ -13,12 +13,12 @@ PATH_PBMAKE=../PBMake
 ifeq ($(BUILD_MODE), 0)
 	BUILD_ARG=-I$(PATH_PBMAKE)/Include -Wall -Wextra -Og -ggdb -g3 -DPBERRALL='1' \
 	  -DBUILDMODE=$(BUILD_MODE) 
-	LINK_ARG=-L$(PATH_PBMAKE)/Lib -lpbdevgtk -lm -rdynamic
+	LINK_ARG=-L$(PATH_PBMAKE)/Lib/`uname -m` -lpbdevgtk -lm -rdynamic
 else 
   ifeq ($(BUILD_MODE), 1)
 	  BUILD_ARG=-I$(PATH_PBMAKE)/Include -Wall -Wextra -Werror -Wfatal-errors -O3 \
 		  -DPBERRSAFEMALLOC='1' -DPBERRSAFEIO='1' -DBUILDMODE=$(BUILD_MODE)
-	  LINK_ARG=-L$(PATH_PBMAKE)/Lib -lpbreleasegtk -lm -rdynamic
+	  LINK_ARG=-L$(PATH_PBMAKE)/Lib/`uname -m` -lpbreleasegtk -lm -rdynamic
 	endif
 endif
 

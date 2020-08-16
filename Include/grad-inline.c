@@ -53,7 +53,7 @@ const VecShort2D* GradCellPos(const GradCell* const that) {
 #if BUILDMODE != 0
 static inline
 #endif 
-long GradCellGetId(const GradCell* const that) {
+int GradCellGetId(const GradCell* const that) {
 #if BUILDMODE == 0
   if (that == NULL) {
     GradErr->_type = PBErrTypeNullPointer;
@@ -68,7 +68,7 @@ long GradCellGetId(const GradCell* const that) {
 #if BUILDMODE != 0
 static inline
 #endif 
-long GradCellGetLink(const GradCell* const that, const int iLink) {
+int GradCellGetLink(const GradCell* const that, const int iLink) {
 #if BUILDMODE == 0
   if (that == NULL) {
     GradErr->_type = PBErrTypeNullPointer;
@@ -90,7 +90,7 @@ long GradCellGetLink(const GradCell* const that, const int iLink) {
 static inline
 #endif 
 void GradCellSetLink(GradCell* const that, const int iLink, 
-  const long iCell) {
+  const int iCell) {
 #if BUILDMODE == 0
   if (that == NULL) {
     GradErr->_type = PBErrTypeNullPointer;
@@ -105,7 +105,7 @@ void GradCellSetLink(GradCell* const that, const int iLink,
   }
   if (iCell < -1) {
     GradErr->_type = PBErrTypeInvalidArg;
-    sprintf(GradErr->_msg, "'iCell' is invalid (-1<=%ld)", iCell);
+    sprintf(GradErr->_msg, "'iCell' is invalid (-1<=%d)", iCell);
     PBErrCatch(GradErr);
   }
 #endif
@@ -230,23 +230,6 @@ void GradCellSetBlocked(GradCell* const that, const bool flag) {
   that->_flagBlocked = flag;
 }
 
-// Get the 'iLink'-th neighbour GradCell of the GradCell 'cell'
-// in the Grad 'that'
-#if BUILDMODE != 0
-static inline
-#endif 
-GradCell* _GradCellNeighbour(const Grad* const that,
-  const GradCell* const cell, const int iLink) {
-#if BUILDMODE == 0
-  if (that == NULL) {
-    GradErr->_type = PBErrTypeNullPointer;
-    sprintf(GradErr->_msg, "'that' is null");
-    PBErrCatch(GradErr);
-  }
-#endif
-  return GradCellAt(that, GradCellGetLink(cell, iLink));
-}
-
 // ------------- Grad
 
 // ================ Functions implementation ====================
@@ -255,7 +238,7 @@ GradCell* _GradCellNeighbour(const Grad* const that,
 #if BUILDMODE != 0
 static inline
 #endif 
-GradCell* _GradCellAtIndex(const Grad* const that, const long iCell) {
+GradCell* _GradCellAtIndex(const Grad* const that, const int iCell) {
 #if BUILDMODE == 0
   if (that == NULL) {
     GradErr->_type = PBErrTypeNullPointer;
@@ -264,7 +247,7 @@ GradCell* _GradCellAtIndex(const Grad* const that, const long iCell) {
   }
   if (iCell < 0 || iCell >= GradGetArea(that)) {
     GradErr->_type = PBErrTypeInvalidArg;
-    sprintf(GradErr->_msg, "'iCell' is invalid (0<=%ld<%ld)", 
+    sprintf(GradErr->_msg, "'iCell' is invalid (0<=%d<%d)", 
       iCell, GradGetArea(that));
     PBErrCatch(GradErr);
   }
@@ -331,7 +314,7 @@ GradHexaType GradHexaGetType(const GradHexa* const that) {
 #if BUILDMODE != 0
 static inline
 #endif 
-long _GradGetArea(const Grad* const that) {
+int _GradGetArea(const Grad* const that) {
 #if BUILDMODE == 0
   if (that == NULL) {
     GradErr->_type = PBErrTypeNullPointer;
@@ -391,7 +374,7 @@ void _GradResetFlagBlocked(Grad* const that) {
     PBErrCatch(GradErr);
   }
 #endif
-  for (long iCell = GradGetArea(that); iCell--;)
+  for (int iCell = GradGetArea(that); iCell--;)
     GradCellSetBlocked(GradCellAt(that, iCell), false);
 }
 
@@ -439,8 +422,8 @@ void _GradRemoveLinkPos(Grad* const that,
   }
 #endif
   // Get the index of 'fromCell' and 'toCell'
-  long from = GradPosToIndex(that, fromCell);
-  long to = GradPosToIndex(that, toCell);
+  int from = GradPosToIndex(that, fromCell);
+  int to = GradPosToIndex(that, toCell);
   // Remove the link
   _GradRemoveLinkIndex(that, from, to, symmetric);
 }
@@ -467,7 +450,7 @@ void _GradRemoveDirPos(Grad* const that,
   }
 #endif
   // Get the index of 'fromCell'
-  long from = GradPosToIndex(that, fromCell);
+  int from = GradPosToIndex(that, fromCell);
   // Remove the link
   _GradRemoveDirIndex(that, from, dir, symmetric);
 }
@@ -494,7 +477,7 @@ void _GradRemoveAllLinkPos(Grad* const that,
   }
 #endif
   // Get the index of 'fromCell'
-  long from = GradPosToIndex(that, fromCell);
+  int from = GradPosToIndex(that, fromCell);
   // Remove the link
   _GradRemoveAllLinkIndex(that, from, symmetric);
 }
@@ -526,8 +509,8 @@ void _GradAddLinkPos(Grad* const that, const VecShort2D* const fromCell,
   }
 #endif
   // Get the index of 'fromCell' and 'toCell'
-  long from = GradPosToIndex(that, fromCell);
-  long to = GradPosToIndex(that, toCell);
+  int from = GradPosToIndex(that, fromCell);
+  int to = GradPosToIndex(that, toCell);
   // Remove the link
   _GradAddLinkIndex(that, from, to, symmetric);
 }
@@ -554,7 +537,7 @@ void _GradAddDirPos(Grad* const that, const VecShort2D* const fromCell,
   }
 #endif
   // Get the index of 'fromCell' and 'toCell'
-  long from = GradPosToIndex(that, fromCell);
+  int from = GradPosToIndex(that, fromCell);
   // Remove the link
   _GradAddDirIndex(that, from, dir, symmetric);
 }
@@ -580,7 +563,7 @@ void _GradAddAllLinkPos(Grad* const that,
   }
 #endif
   // Get the index of 'fromCell' and 'toCell'
-  long from = GradPosToIndex(that, fromCell);
+  int from = GradPosToIndex(that, fromCell);
   // Remove the link
   _GradAddAllLinkIndex(that, from, symmetric);
 }
