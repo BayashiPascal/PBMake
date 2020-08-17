@@ -4092,7 +4092,8 @@ void _VecFloatRotAxis(VecFloat3D* const that,
     PBErrCatch(PBMathErr);
   }
 #endif
-  *that = _VecFloatGetRotAxis(that, axis, theta);
+  VecFloat3D v = _VecFloatGetRotAxis(that, axis, theta);
+  VecCopy(that, &v);
 }
 
 // Rotate right-hand 'that' by 'theta' radians around X and 
@@ -4114,7 +4115,8 @@ void _VecFloatRotX(VecFloat3D* const that, const float theta) {
     PBErrCatch(PBMathErr);
   }
 #endif
-  *that = _VecFloatGetRotX(that, theta);
+  VecFloat3D v = _VecFloatGetRotX(that, theta);
+  VecCopy(that, &v);
 }
 
 // Rotate right-hand 'that' by 'theta' radians around Y and 
@@ -4136,7 +4138,8 @@ void _VecFloatRotY(VecFloat3D* const that, const float theta) {
     PBErrCatch(PBMathErr);
   }
 #endif
-  *that = _VecFloatGetRotY(that, theta);
+  VecFloat3D v = _VecFloatGetRotY(that, theta);
+  VecCopy(that, &v);
 }
 
 // Rotate right-hand 'that' by 'theta' radians around Z and 
@@ -4158,7 +4161,8 @@ void _VecFloatRotZ(VecFloat3D* const that, const float theta) {
     PBErrCatch(PBMathErr);
   }
 #endif
-  *that = _VecFloatGetRotZ(that, theta);
+  VecFloat3D v = _VecFloatGetRotZ(that, theta);
+  VecCopy(that, &v);
 }
 
 // Free memory used by the QRDecomp 'that'
