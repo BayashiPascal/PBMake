@@ -45,6 +45,7 @@ LIST_REPOS=\
 	GradAutomaton \
 	Smally \
 	Buzzy \
+	NeuraMorph \
 	
 
 all: 
@@ -94,6 +95,7 @@ LIST_OBJ=\
 	../GradAutomaton/gradautomaton.o \
 	../Smally/smally.o \
 	../Buzzy/buzzy.o \
+	../NeuraMorph/neuramorph.o \
 	
 
 LIST_INCLUDE=\
@@ -151,6 +153,8 @@ LIST_INCLUDE=\
 	../Smally/smally-inline.c \
 	../Buzzy/buzzy.h \
 	../Buzzy/buzzy-inline.c \
+	../NeuraMorph/neuramorph.h \
+	../NeuraMorph/neuramorph-inline.c \
 	
 
 libAll: libDev libRelease libDevGtk libReleaseGtk
