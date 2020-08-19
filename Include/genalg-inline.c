@@ -354,6 +354,28 @@ void GASetTypeNeuraNet(GenAlg* const that, const int nbIn,
   that->_NNdata._flagMutableLink = true;
 }
 
+// Set the type of the GenAlg 'that' to genAlgTypeMorpheus, the GenAlg
+// will be used with the Morpheus type of learning on the 'nbBase' bases
+// indicated by their indices 'iBases', and the 'bases' and 'links' as
+// initialisation values
+#if BUILDMODE != 0
+static inline
+#endif
+void GASetTypeMorpheus(GenAlg* const that, unsigned int nbBase, long* iBases, const VecFloat* bases, const VecLong* links) {
+#if BUILDMODE == 0
+  if (that == NULL) {
+    GenAlgErr->_type = PBErrTypeNullPointer;
+    sprintf(GenAlgErr->_msg, "'that' is null");
+    PBErrCatch(GenAlgErr);
+  }
+#endif
+  that->_type = genAlgTypeMorpheus;
+  that->_MorpheusData._nbBase = nbBase;
+  that->_MorpheusData._iBases = iBases;
+  that->_MorpheusData._bases = bases;
+  that->_MorpheusData._links = links;
+}
+
 // Set the type of the GenAlg 'that' to genAlgTypeNeuraNetConv, 
 // the GenAlg will be used with a NeuraNet having 'nbIn' inputs, 
 // 'nbHid' hidden values, 'nbOut' outputs, 'nbBaseConv' bases function,
@@ -726,13 +748,9 @@ float GAGetDiversity(const GenAlg* const that) {
     PBErrCatch(GenAlgErr);
   }
 #endif 
-  float diversity = GAGetDiversityThreshold(that) + 1.0;
-  for (int iAdn = 0; iAdn < GAGetNbElites(that) - 1; ++iAdn) {
-    for (int jAdn = iAdn + 1; jAdn < GAGetNbElites(that); ++jAdn) {
-      diversity = fabs(MIN(diversity, 
-        GAAdn(that, iAdn)->_val - GAAdn(that, jAdn)->_val));
-    }
-  }
+
+  float diversity = fabs(
+        GAAdn(that, GAGetNbElites(that) - 2)->_val - GAAdn(that, GAGetNbElites(that) - 1)->_val);
   return diversity;
 }
 
@@ -828,5 +846,152 @@ bool GAGetNeuraNetLinkMutability(GenAlg* const that) {
 #endif
   return that->_NNdata._flagMutableLink;
 }
+
+// Get the flag about KTEvent at last call of GAStep for
+// the GenAlg 'that'
+#if BUILDMODE != 0
+static inline
+#endif
+bool GAGetFlagKTEvent(GenAlg* const that) {
+#if BUILDMODE == 0
+  if (that == NULL) {
+    GenAlgErr->_type = PBErrTypeNullPointer;
+    sprintf(GenAlgErr->_msg, "'that' is null");
+    PBErrCatch(GenAlgErr);
+  }
+#endif
+  return that->_flagKTEvent;
+}
+
+// Add a birth to the history of the GenAlg 'that'
+#if BUILDMODE != 0
+static inline
+#endif
+void GAHistoryRecordBirth(GAHistory* const that, const GenAlgAdn* child,
+  const unsigned int epoch) {
+#if BUILDMODE == 0
+  if (that == NULL) {
+    GenAlgErr->_type = PBErrTypeNullPointer;
+    sprintf(GenAlgErr->_msg, "'that' is null");
+    PBErrCatch(GenAlgErr);
+  }
+  if (child == NULL) {
+    GenAlgErr->_type = PBErrTypeNullPointer;
+    sprintf(GenAlgErr->_msg, "'child' is null");
+    PBErrCatch(GenAlgErr);
+  }
+#endif
+  // Create the GAHistoryBirth
+  GAHistoryBirth* birth = PBErrMalloc(GenAlgErr, sizeof(GAHistory));
+  birth->_epoch = epoch;
+  birth->_idParents[0] = child->_idParents[0];
+  birth->_idParents[1] = child->_idParents[1];
+  birth->_idChild = GAAdnGetId(child);
+  // Add the birth to the genealogy of 'that'
+  GSetAppend(&(that->_genealogy), birth);
+}
+
+// Set the history recording flag for the GenAlg 'that'
+#if BUILDMODE != 0
+static inline
+#endif
+void GASetFlagHistory(GenAlg* const that, const bool flag) {
+#if BUILDMODE == 0
+  if (that == NULL) {
+    GenAlgErr->_type = PBErrTypeNullPointer;
+    sprintf(GenAlgErr->_msg, "'that' is null");
+    PBErrCatch(GenAlgErr);
+  }
+#endif
+  // Set the flag
+  that->_flagHistory = flag;
+}
+
+// Get the history recording flag for the GenAlg 'that'
+#if BUILDMODE != 0
+static inline
+#endif
+bool GAGetFlagHistory(const GenAlg* const that){
+#if BUILDMODE == 0
+  if (that == NULL) {
+    GenAlgErr->_type = PBErrTypeNullPointer;
+    sprintf(GenAlgErr->_msg, "'that' is null");
+    PBErrCatch(GenAlgErr);
+  }
+#endif
+  // Return the flag
+  return that->_flagHistory;
+}
+
+// Set the path where the history is recorded for the GenAlg 'that'
+#if BUILDMODE != 0
+static inline
+#endif
+void GASetHistoryPath(GenAlg* const that, const char* const path) {
+#if BUILDMODE == 0
+  if (that == NULL) {
+    GenAlgErr->_type = PBErrTypeNullPointer;
+    sprintf(GenAlgErr->_msg, "'that' is null");
+    PBErrCatch(GenAlgErr);
+  }
+  if (path == NULL) {
+    GenAlgErr->_type = PBErrTypeNullPointer;
+    sprintf(GenAlgErr->_msg, "'path' is null");
+    PBErrCatch(GenAlgErr);
+  }
+#endif
+  // Set the path
+  free(that->_history._path);
+  that->_history._path = strdup(path);
+}
+
+// Get the path where the history is recorded for the GenAlg 'that'
+#if BUILDMODE != 0
+static inline
+#endif
+const char* GAGetHistoryPath(GenAlg* const that) {
+#if BUILDMODE == 0
+  if (that == NULL) {
+    GenAlgErr->_type = PBErrTypeNullPointer;
+    sprintf(GenAlgErr->_msg, "'that' is null");
+    PBErrCatch(GenAlgErr);
+  }
+#endif
+  // Return the path
+  return that->_history._path;
+}
+
+// Set the maximum age for an entity of the GenAlg 'that'
+#if BUILDMODE != 0
+static inline
+#endif
+void GASetMaxAge(GenAlg* const that, const unsigned long age) {
+#if BUILDMODE == 0
+  if (that == NULL) {
+    GenAlgErr->_type = PBErrTypeNullPointer;
+    sprintf(GenAlgErr->_msg, "'that' is null");
+    PBErrCatch(GenAlgErr);
+  }
+#endif
+  // Set the maximum age
+  that->_maxAge = age;
+}
+
+// Get the maximum age for an entity of the GenAlg 'that'
+#if BUILDMODE != 0
+static inline
+#endif
+unsigned long GAGetMaxAge(GenAlg* const that) {
+#if BUILDMODE == 0
+  if (that == NULL) {
+    GenAlgErr->_type = PBErrTypeNullPointer;
+    sprintf(GenAlgErr->_msg, "'that' is null");
+    PBErrCatch(GenAlgErr);
+  }
+#endif
+  // Return the maximumAge
+  return that->_maxAge;
+}
+
 
 

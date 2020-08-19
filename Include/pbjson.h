@@ -123,6 +123,10 @@ void JSONArrayValFlush(JSONArrayVal* const that);
 // Shortcut to get the label of the first value of the JSONNode 'node'
 #define JSONLblVal(node) (JSONLabel(JSONValue((node), 0)))
 
+// Shortcut to get the label of the first value of the JSONNode 'node'
+// to 'val'
+#define JSONSetVal(node, val) JSONSetLabel(JSONValue((node), 0), (val))
+
 // ================= Polymorphism ==================
 
 #define JSONAddProp(Node, Key, Val) _Generic(Val, \
