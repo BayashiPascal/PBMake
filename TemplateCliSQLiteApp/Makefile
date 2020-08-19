@@ -47,8 +47,8 @@ clean:
 	rm -f *.o main
 
 sqllite:
-	wget https://sqlite.org/2020/sqlite-amalgamation-3320200.zip; \
-	unzip sqlite-amalgamation-3320200.zip; \
-	cd sqlite-amalgamation-3320200; \
+	wget https://sqlite.org/2020/sqlite-amalgamation-3330000.zip; \
+	unzip sqlite-amalgamation-3330000.zip; \
+	cd sqlite-amalgamation-3330000; \
 	gcc shell.c sqlite3.c -lpthread -ldl -O3 -o sqlite3; \
 	cd -
