@@ -1820,7 +1820,6 @@ $(repo)_INC_H_EXE:= \
 # List of directories from where include headers
 $(repo)_INC_DIR:= \
 	-I$($(repo)_DIR) \
-	$(ROOT_DIR)/../libao-1.2.0/include/ \
 	$(pbmath_INC_DIR) \
 	$(gset_INC_DIR) \
 	$(pberr_INC_DIR)
