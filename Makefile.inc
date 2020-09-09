@@ -1814,6 +1814,7 @@ $(repo)_INC_H:= \
 	$(pbmath_H) \
 	$(gset_H) \
 	$(gdataset_H) \
+	$(bcurve_H) \
 	$(pberr_H)
 # List of header includes for the executable
 $(repo)_INC_H_EXE:= \
@@ -1824,6 +1825,7 @@ $(repo)_INC_DIR:= \
 	$(pbmath_INC_DIR) \
 	$(gset_INC_DIR) \
 	$(gdataset_INC_DIR) \
+	$(bcurve_INC_DIR) \
 	$(pberr_INC_DIR)
 # List of object dependencies for the repo
 $(repo)_DEP_O:= \
@@ -1831,6 +1833,7 @@ $(repo)_DEP_O:= \
 	$(pbmath_DEP_O) \
 	$(gset_DEP_O) \
 	$(gdataset_DEP_O) \
+	$(bcurve_DEP_O) \
 	$(pberr_DEP_O)
 # List of other dependencies for the repo
 $(repo)_DEP:= \
