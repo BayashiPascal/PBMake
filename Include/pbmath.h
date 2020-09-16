@@ -238,6 +238,12 @@ static inline
 #endif 
 void _VecLongSetNull(VecLong* const that);
 
+// Set all values of the vector 'that' to 'v'
+#if BUILDMODE != 0 
+static inline 
+#endif 
+void _VecLongSetAll(VecLong* const that, long v);
+
 // Step the values of the vector incrementally by 1 from 0
 // in the following order (for example) : 
 // (0,0,0)->(0,0,1)->(0,0,2)->(0,1,0)->(0,1,1)->...
@@ -621,6 +627,12 @@ static inline
 #endif 
 void _VecShortSetNull(VecShort* const that);
 
+// Set all values of the vector 'that' to 'v'
+#if BUILDMODE != 0 
+static inline 
+#endif 
+void _VecShortSetAll(VecShort* const that, short v);
+
 // Step the values of the vector incrementally by 1 from 0
 // in the following order (for example) : 
 // (0,0,0)->(0,0,1)->(0,0,2)->(0,1,0)->(0,1,1)->...
@@ -934,6 +946,20 @@ void _VecFloatSetNull2D(VecFloat2D* const that);
 static inline 
 #endif 
 void _VecFloatSetNull3D(VecFloat3D* const that);
+
+// Set all values of the vector 'that' to 'v'
+#if BUILDMODE != 0 
+static inline 
+#endif 
+void _VecFloatSetAll(VecFloat* const that, float v);
+#if BUILDMODE != 0 
+static inline 
+#endif 
+void _VecFloatSetAll2D(VecFloat2D* const that, float v);
+#if BUILDMODE != 0 
+static inline 
+#endif 
+void _VecFloatSetAll3D(VecFloat3D* const that, float v);
 
 // Return the dimension of the VecFloat
 // Return 0 if arguments are invalid
@@ -1469,11 +1495,15 @@ short _MatFloatGetNbCol(const MatFloat* const that);
 
 // Return the inverse matrix of 'that'
 // The matrix must be a square matrix
-MatFloat* _MatFloatGetInv(MatFloat* const that);
+// Return NULL if the matrix is not invertible, or in some case when
+// the matrix's diagonal contains null values and the matrix's size
+// is greater than 3
+MatFloat* _MatFloatGetInv(const MatFloat* const that);
 
 // Return the product of matrix 'that' and vector 'v'
 // Number of columns of 'that' must equal dimension of 'v'
-VecFloat* _MatFloatGetProdVecFloat(MatFloat* const that, VecFloat* v);
+VecFloat* _MatFloatGetProdVecFloat(
+  const MatFloat* const that, const VecFloat* v);
 
 // Return the product of vector 'v' and transpose of vector 'w'
 MatFloat* _MatFloatGetProdVecVecTransposeFloat(
@@ -1482,7 +1512,7 @@ MatFloat* _MatFloatGetProdVecVecTransposeFloat(
 
 // Return the product of matrix 'that' by matrix 'tho'
 // Number of columns of 'that' must equal number of line of 'tho'
-MatFloat* _MatFloatGetProdMatFloat(MatFloat* const that, MatFloat* tho);
+MatFloat* _MatFloatGetProdMatFloat(const MatFloat* const that, const MatFloat* tho);
 
 // Return the addition of matrix 'that' with matrix 'tho'
 // 'that' and 'tho' must have same dimensions
@@ -1513,14 +1543,15 @@ bool _MatFloatIsEqual(MatFloat* const that, MatFloat* tho);
 // smallest (in absolute value). The following VecFloat are the 
 // respectiev Eigen vectors
 // 'that' must be a 2D square matrix
+// Return the identity if the QR decompostion fails
+// http://madrury.github.io/jekyll/update/statistics/2017/10/04/qr-algorithm.html
 // TODO: should be improved with the Hessenberg QR method
 // https://www.math.kth.se/na/SF2524/matber15/qrmethod.pdf
-// http://madrury.github.io/jekyll/update/statistics/2017/10/04/qr-algorithm.html
 GSetVecFloat _MatFloatGetEigenValues(const MatFloat* const that);
 
 // Calculate the QR decomposition of the MatFloat 'that' using the 
 // Householder algorithm
-// Return NULL if the MatFloat couldn't be decomposed
+// Return {NULL, NULL} if the MatFloat couldn't be decomposed
 // http://www.seas.ucla.edu/~vandenbe/133A/lectures/qr.pdf
 QRDecomp _MatFloatGetQR(const MatFloat* const that);
 
@@ -1687,6 +1718,93 @@ float RatioToFloat(const Ratio* that);
 // numerator < denominator
 void RatioReduce(Ratio* that);
 
+// Get the base of the Ratio 'that'
+#if BUILDMODE != 0 
+static inline 
+#endif 
+long RatioGetBase(const Ratio* that);
+
+// Get the numerator of the Ratio 'that'
+#if BUILDMODE != 0 
+static inline 
+#endif 
+unsigned int RatioGetNumerator(const Ratio* that);
+
+// Get the denominator of the Ratio 'that'
+#if BUILDMODE != 0 
+static inline 
+#endif 
+unsigned int RatioGetDenominator(const Ratio* that);
+
+// Set the base of the Ratio 'that' to 'v'
+#if BUILDMODE != 0 
+static inline 
+#endif 
+void RatioSetBase(Ratio* that, long v);
+
+// Set the numerator of the Ratio 'that' to 'v'
+#if BUILDMODE != 0 
+static inline 
+#endif 
+void RatioSetNumerator(Ratio* that, unsigned int v);
+
+// Set the denominator of the Ratio 'that' to 'v'
+#if BUILDMODE != 0 
+static inline 
+#endif 
+void RatioSetDenominator(Ratio* that, unsigned int v);
+
+// Print the Ratio on 'stream' as a+b/c
+void RatioPrint(const Ratio* that, FILE* stream);
+#define RatioPrintln(R, S) do{RatioPrint(R,S);fprintf(S,"\n");}while(0)
+
+// -------------- LeastSquareLinReg
+
+// ================= Data structure ===================
+
+// Linear system of equalities
+typedef struct LeastSquareLinReg {
+
+  // Component
+  const MatFloat* X;
+
+  // Matrix for computation
+  MatFloat* Xp;
+
+  // Bias of the last computed solution
+  float bias;
+
+} LeastSquareLinReg;
+
+// ================ Functions declaration ====================
+
+// Create a new static LeastSquareLinReg
+LeastSquareLinReg LeastSquareLinRegCreateStatic(MatFloat* X);
+
+// Free the static LeastSquareLinReg 'that'
+void LeastSquareLinRegFreeStatic(LeastSquareLinReg* that);
+
+// Compute the solution of the LeastSquareLinReg 'that' for 'Y'
+VecFloat* LSLRSolve(LeastSquareLinReg* that, const VecFloat* Y);
+
+// Set the component of the LeastSquareLinReg 'that' to 'X'
+#if BUILDMODE != 0 
+static inline 
+#endif 
+void LSLRSetComp(LeastSquareLinReg* that, const MatFloat* X);
+
+// Get the bias of the last computed solution of the LeastSquareLinReg 'that'
+#if BUILDMODE != 0 
+static inline 
+#endif 
+float LSLRGetBias(const LeastSquareLinReg* that);
+
+// Return true if the LeastSquareLinReg 'that' is solvable
+#if BUILDMODE != 0 
+static inline 
+#endif 
+bool LSLRIsSolvable(const LeastSquareLinReg* that);
+
 // -------------- Usefull basic functions
 
 // ================ Functions declaration ====================
@@ -1747,46 +1865,6 @@ float* GetFibonacciPolarLattice(
 // Return the greatest common divisor using the Stein's algorithm
 // https://en.wikipedia.org/wiki/Binary_GCD_algorithm
 unsigned int GetGCD(unsigned int u, unsigned int v);
-
-// Get the base of the Ratio 'that'
-#if BUILDMODE != 0 
-static inline 
-#endif 
-long RatioGetBase(const Ratio* that);
-
-// Get the numerator of the Ratio 'that'
-#if BUILDMODE != 0 
-static inline 
-#endif 
-unsigned int RatioGetNumerator(const Ratio* that);
-
-// Get the denominator of the Ratio 'that'
-#if BUILDMODE != 0 
-static inline 
-#endif 
-unsigned int RatioGetDenominator(const Ratio* that);
-
-// Set the base of the Ratio 'that' to 'v'
-#if BUILDMODE != 0 
-static inline 
-#endif 
-void RatioSetBase(Ratio* that, long v);
-
-// Set the numerator of the Ratio 'that' to 'v'
-#if BUILDMODE != 0 
-static inline 
-#endif 
-void RatioSetNumerator(Ratio* that, unsigned int v);
-
-// Set the denominator of the Ratio 'that' to 'v'
-#if BUILDMODE != 0 
-static inline 
-#endif 
-void RatioSetDenominator(Ratio* that, unsigned int v);
-
-// Print the Ratio on 'stream' as a+b/c
-void RatioPrint(const Ratio* that, FILE* stream);
-#define RatioPrintln(R, S) do{RatioPrint(R,S);fprintf(S,"\n");}while(0)
 
 // ================= Polymorphism ==================
 
@@ -1992,6 +2070,30 @@ void RatioPrint(const Ratio* that, FILE* stream);
       VecLong3D*: (VecLong*)(Vec), \
       VecLong4D*: (VecLong*)(Vec), \
       default: Vec))
+
+#define VecSetAll(Vec, Val) _Generic(Vec, \
+  VecFloat*: _VecFloatSetAll, \
+  VecFloat2D*: _VecFloatSetAll, \
+  VecFloat3D*: _VecFloatSetAll, \
+  VecShort*: _VecShortSetAll, \
+  VecShort2D*: _VecShortSetAll, \
+  VecShort3D*: _VecShortSetAll, \
+  VecShort4D*: _VecShortSetAll, \
+  VecLong*: _VecLongSetAll, \
+  VecLong2D*: _VecLongSetAll, \
+  VecLong3D*: _VecLongSetAll, \
+  VecLong4D*: _VecLongSetAll, \
+  default: PBErrInvalidPolymorphism)( \
+    _Generic(Vec,  \
+      VecFloat2D*: (VecFloat*)(Vec), \
+      VecFloat3D*: (VecFloat*)(Vec), \
+      VecShort2D*: (VecShort*)(Vec), \
+      VecShort3D*: (VecShort*)(Vec), \
+      VecShort4D*: (VecShort*)(Vec), \
+      VecLong2D*: (VecLong*)(Vec), \
+      VecLong3D*: (VecLong*)(Vec), \
+      VecLong4D*: (VecLong*)(Vec), \
+      default: Vec), Val)
 
 #define VecCopy(VecDest, VecSrc) _Generic(VecDest, \
   VecFloat*: _Generic(VecSrc, \

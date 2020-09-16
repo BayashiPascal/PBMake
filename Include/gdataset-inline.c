@@ -65,12 +65,28 @@ void _GDSUnsplit(GDataSet* const that) {
   VecFree(&split);
 }
 
+// Shuffle the samples of the GDataSet 'that'.
+#if BUILDMODE != 0
+static inline
+#endif 
+void _GDSShuffle(GDataSet* const that) {
+#if BUILDMODE == 0
+  if (that == NULL) {
+    GDataSetErr->_type = PBErrTypeNullPointer;
+    sprintf(PBImgAnalysisErr->_msg, "'that' is null");
+    PBErrCatch(PBImgAnalysisErr);
+  }
+#endif
+  // Shuffle the samples
+  GSetShuffle(&(that->_samples));
+}
+
 // Shuffle the samples of the category 'iCat' of the GDataSet 'that'.
 // Reset the iterator of the category
 #if BUILDMODE != 0
 static inline
 #endif 
-void _GDSShuffle(GDataSet* const that, const long iCat) {
+void _GDSShuffleCat(GDataSet* const that, const long iCat) {
 #if BUILDMODE == 0
   if (that == NULL) {
     GDataSetErr->_type = PBErrTypeNullPointer;
@@ -112,7 +128,7 @@ void _GDSShuffleAll(GDataSet* const that) {
   // Loop on categories
   for (int iCat = GDSGetNbCat(that); iCat--;)
     // Shuffle the category
-    GDSShuffle(that, iCat);
+    GDSShuffleCat(that, iCat);
 }
 
 // Get the name of the GDataSet 'that'
@@ -246,7 +262,7 @@ void _GDSResetAll(GDataSet* const that) {
 #endif
   // Loop on categories
   for (int iCat = GDSGetNbCat(that); iCat--;)
-    // Shuffle the category
+    // Reset the category
     GDSReset(that, iCat);
 }
 
@@ -429,3 +445,64 @@ void _GDSGenBrushPairAddSample(
   that->_dataSet._nbSample += 1;
 }
 #endif 
+
+// Get the number of input values in one sample of the GDataSet 'that'
+#if BUILDMODE != 0
+static inline
+#endif 
+short _GDSGetNbInputs(const GDataSet* const that) {
+#if BUILDMODE == 0
+  if (that == NULL) {
+    GDataSetErr->_type = PBErrTypeNullPointer;
+    sprintf(PBImgAnalysisErr->_msg, "'that' is null");
+    PBErrCatch(PBImgAnalysisErr);
+  }
+#endif
+  return that->_nbInputs;
+}
+
+// Get the number of output values in one sample of the GDataSet 'that'
+#if BUILDMODE != 0
+static inline
+#endif 
+short _GDSGetNbOutputs(const GDataSet* const that) {
+#if BUILDMODE == 0
+  if (that == NULL) {
+    GDataSetErr->_type = PBErrTypeNullPointer;
+    sprintf(PBImgAnalysisErr->_msg, "'that' is null");
+    PBErrCatch(PBImgAnalysisErr);
+  }
+#endif
+  return that->_nbOutputs;
+}
+
+// Set the number of input values in one sample of the GDataSet 'that' to 'nb'
+#if BUILDMODE != 0
+static inline
+#endif 
+void _GDSSetNbInputs(GDataSet* const that, const short nb) {
+#if BUILDMODE == 0
+  if (that == NULL) {
+    GDataSetErr->_type = PBErrTypeNullPointer;
+    sprintf(PBImgAnalysisErr->_msg, "'that' is null");
+    PBErrCatch(PBImgAnalysisErr);
+  }
+#endif
+  that->_nbInputs = nb;
+}
+
+// Set the number of output values in one sample of the GDataSet 'that' to 'nb'
+#if BUILDMODE != 0
+static inline
+#endif 
+void _GDSSetNbOutputs(GDataSet* const that, const short nb) {
+#if BUILDMODE == 0
+  if (that == NULL) {
+    GDataSetErr->_type = PBErrTypeNullPointer;
+    sprintf(PBImgAnalysisErr->_msg, "'that' is null");
+    PBErrCatch(PBImgAnalysisErr);
+  }
+#endif
+  that->_nbOutputs = nb;
+}
+

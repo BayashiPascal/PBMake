@@ -56,7 +56,9 @@ typedef struct GDataSet {
   // e.g.: 
   // if samples are VecFloat<3> then _dim = VecShort<1>[3]
   // if samples are GenBrush then _dim = VecShort<2>[width, height]
-  VecShort* _sampleDim; 
+  VecShort* _sampleDim;
+  short _nbInputs;
+  short _nbOutputs;
   // Splitting of samples
   VecShort* _split;
   // Sets of splitted samples
@@ -167,6 +169,30 @@ static inline
 #endif 
 long _GDSGetSize(const GDataSet* const that);
 
+// Get the number of input values in one sample of the GDataSet 'that'
+#if BUILDMODE != 0
+static inline
+#endif 
+short _GDSGetNbInputs(const GDataSet* const that);
+
+// Get the number of output values in one sample of the GDataSet 'that'
+#if BUILDMODE != 0
+static inline
+#endif 
+short _GDSGetNbOutputs(const GDataSet* const that);
+
+// Set the number of input values in one sample of the GDataSet 'that' to 'nb'
+#if BUILDMODE != 0
+static inline
+#endif 
+void _GDSSetNbInputs(GDataSet* const that, const short nb);
+
+// Set the number of output values in one sample of the GDataSet 'that' to 'nb'
+#if BUILDMODE != 0
+static inline
+#endif 
+void _GDSSetNbOutputs(GDataSet* const that, const short nb);
+
 // Get the number of masks in the GDataSet 'that'
 int _GDSGetNbMask(const GDataSet* const that);
 
@@ -190,7 +216,7 @@ long _GDSGetSizeCat(const GDataSet* const that, const long iCat);
 // would mean 2 categories with 3 samples in the first one and 4 
 // samples in the second one. There must me at least as many samples 
 // in the data set as the sum of samples in 'cat'.
-// Each category must have at least one sample. Samples are allocated // randomly to the categories.
+// Each category must have at least one sample.
 // If 'that' was already splitted the previous splitting is discarded.
 void _GDSSplit(GDataSet* const that, const VecShort* const cat);
 
@@ -201,12 +227,18 @@ static inline
 #endif 
 void _GDSUnsplit(GDataSet* const that);
 
+// Shuffle the samples of the GDataSet 'that'.
+#if BUILDMODE != 0
+static inline
+#endif 
+void _GDSShuffle(GDataSet* const that);
+
 // Shuffle the samples of the category 'iCat' of the GDataSet 'that'.
 // Reset the iterator of the category
 #if BUILDMODE != 0
 static inline
 #endif 
-void _GDSShuffle(GDataSet* const that, const long iCat);
+void _GDSShuffleCat(GDataSet* const that, const long iCat);
 
 // Shuffle the samples of all the categories of the GDataSet 'that'.
 // Reset the iterator of the categories
@@ -268,6 +300,16 @@ VecFloat* GDSGetSampleVecFloat(
 GDSGenBrushPair* GDSGetSampleGenBrushPair(
   const GDataSetGenBrushPair* const that, const int iCat);
 
+// Get the inputs of the current sample in the category 'iCat' of
+// the GDataSet 'that'
+VecFloat* GDSGetSampleInputsVecFloat(
+  const GDataSetVecFloat* const that, const int iCat);
+
+// Get the outputs of the current sample in the category 'iCat' of
+// the GDataSet 'that'
+VecFloat* GDSGetSampleOutputsVecFloat(
+  const GDataSetVecFloat* const that, const int iCat);
+
 // Release the memory used by the FilePathPair 'that'
 void GDSFilePathPairFree(GDSFilePathPair** const that);
 #ifdef GENBRUSH_H
@@ -300,8 +342,15 @@ const GSet* _GDSGenBrushPairSamples(
 // Center the GDataSet 'that' on its mean
 void GDSMeanCenter(GDataSetVecFloat* const that);
 
+// Center the inputs of the GDataSet 'that' on its mean
+void GDSMeanCenterInputs(GDataSetVecFloat* const that);
+
 // Normalize the GDataSet 'that', ie normalize each of its vectors
 void GDSNormalize(GDataSetVecFloat* const that);
+
+// Normalize the inputs of GDataSet 'that', ie normalize each of its
+// input vectors
+void GDSNormalizeInputs(GDataSetVecFloat* const that);
 
 // Get the mean of the GDataSet 'that'
 VecFloat* GDSGetMean(const GDataSetVecFloat* const that);
@@ -316,6 +365,9 @@ GDataSetVecFloat GDSClone(const GDataSetVecFloat* const that);
 
 // Get the covariance matrix of the GDataSetVecFloat 'that'
 MatFloat* GDSGetCovarianceMatrix(const GDataSetVecFloat* const that);
+
+// Get the covariance matrix of inputs of the GDataSetVecFloat 'that'
+MatFloat* GDSGetInpCovarianceMatrix(const GDataSetVecFloat* const that);
 
 // Get the covariance of the variables at 'indices' in the
 // GDataSetVecFloat 'that'
@@ -481,6 +533,16 @@ VecFloat* GDSVecFloatNearestNeighbourBrute(
   const GDataSetGenBrushPair*: GDSGetSampleGenBrushPair, \
   default: PBErrInvalidPolymorphism)(DataSet, ICat)
 
+#define GDSGetSampleInputs(DataSet, ICat) _Generic(DataSet, \
+  GDataSetVecFloat*: GDSGetSampleInputsVecFloat, \
+  const GDataSetVecFloat*: GDSGetSampleInputsVecFloat, \
+  default: PBErrInvalidPolymorphism)(DataSet, ICat)
+
+#define GDSGetSampleOutputs(DataSet, ICat) _Generic(DataSet, \
+  GDataSetVecFloat*: GDSGetSampleOutputsVecFloat, \
+  const GDataSetVecFloat*: GDSGetSampleOutputsVecFloat, \
+  default: PBErrInvalidPolymorphism)(DataSet, ICat)
+
 #define GDSGetSize(DataSet) _Generic(DataSet, \
   GDataSet*: _GDSGetSize, \
   const GDataSet*: _GDSGetSize, \
@@ -551,10 +613,16 @@ VecFloat* GDSVecFloatNearestNeighbourBrute(
   const GDataSetGenBrushPair*: _GDSSampleDim, \
   default: PBErrInvalidPolymorphism)((const GDataSet*)DataSet)
 
-#define GDSShuffle(DataSet, ICat) _Generic(DataSet, \
+#define GDSShuffle(DataSet) _Generic(DataSet, \
   GDataSet*: _GDSShuffle, \
   GDataSetVecFloat*: _GDSShuffle, \
   GDataSetGenBrushPair*: _GDSShuffle, \
+  default: PBErrInvalidPolymorphism)((GDataSet*)DataSet)
+
+#define GDSShuffleCat(DataSet, ICat) _Generic(DataSet, \
+  GDataSet*: _GDSShuffleCat, \
+  GDataSetVecFloat*: _GDSShuffleCat, \
+  GDataSetGenBrushPair*: _GDSShuffleCat, \
   default: PBErrInvalidPolymorphism)((GDataSet*)DataSet, ICat)
 
 #define GDSShuffleAll(DataSet) _Generic(DataSet, \
@@ -621,6 +689,34 @@ VecFloat* GDSVecFloatNearestNeighbourBrute(
     GDataSetVecFloat*: GDSVecFloatNearestNeighbourBrute, \
     const GDataSetVecFloat*: GDSVecFloatNearestNeighbourBrute, \
     default: PBErrInvalidPolymorphism)(DataSet, Target, ICat)
+
+#define GDSGetNbInputs(DataSet) _Generic(DataSet, \
+  GDataSet*: _GDSGetNbInputs, \
+  const GDataSet*: _GDSGetNbInputs, \
+  GDataSetVecFloat*: _GDSGetNbInputs, \
+  const GDataSetVecFloat*: _GDSGetNbInputs, \
+  default: PBErrInvalidPolymorphism)((const GDataSet*)DataSet)
+
+#define GDSGetNbOutputs(DataSet) _Generic(DataSet, \
+  GDataSet*: _GDSGetNbOutputs, \
+  const GDataSet*: _GDSGetNbOutputs, \
+  GDataSetVecFloat*: _GDSGetNbOutputs, \
+  const GDataSetVecFloat*: _GDSGetNbOutputs, \
+  default: PBErrInvalidPolymorphism)((const GDataSet*)DataSet)
+
+#define GDSSetNbInputs(DataSet, Nb) _Generic(DataSet, \
+  GDataSet*: _GDSSetNbInputs, \
+  const GDataSet*: _GDSSetNbInputs, \
+  GDataSetVecFloat*: _GDSSetNbInputs, \
+  const GDataSetVecFloat*: _GDSSetNbInputs, \
+  default: PBErrInvalidPolymorphism)((GDataSet*)DataSet, Nb)
+
+#define GDSSetNbOutputs(DataSet, Nb) _Generic(DataSet, \
+  GDataSet*: _GDSSetNbOutputs, \
+  const GDataSet*: _GDSSetNbOutputs, \
+  GDataSetVecFloat*: _GDSSetNbOutputs, \
+  const GDataSetVecFloat*: _GDSSetNbOutputs, \
+  default: PBErrInvalidPolymorphism)((GDataSet*)DataSet, Nb)
 
 // ================ static inliner ====================
 

@@ -269,6 +269,23 @@ void _VecShortSetNull(VecShort* const that) {
     that->_val[iDim] = 0;
 }
 
+// Set all values of the vector 'that' to 'd'
+#if BUILDMODE != 0
+static inline
+#endif 
+void _VecShortSetAll(VecShort* const that, short v) {
+#if BUILDMODE == 0
+  if (that == NULL) {
+    PBMathErr->_type = PBErrTypeNullPointer;
+    sprintf(PBMathErr->_msg, "'that' is null");
+    PBErrCatch(PBMathErr);
+  }
+#endif
+  // Set values
+  for (long iDim = that->_dim; iDim--;)
+    that->_val[iDim] = v;
+}
+
 // Return the dimension of the VecShort
 #if BUILDMODE != 0
 static inline
@@ -1295,6 +1312,23 @@ void _VecLongSetNull(VecLong* const that) {
     that->_val[iDim] = 0;
 }
 
+// Set all values of the vector 'that' to 'v'
+#if BUILDMODE != 0
+static inline
+#endif 
+void _VecLongSetAll(VecLong* const that, long v) {
+#if BUILDMODE == 0
+  if (that == NULL) {
+    PBMathErr->_type = PBErrTypeNullPointer;
+    sprintf(PBMathErr->_msg, "'that' is null");
+    PBErrCatch(PBMathErr);
+  }
+#endif
+  // Set values
+  for (long iDim = that->_dim; iDim--;)
+    that->_val[iDim] = v;
+}
+
 // Return the dimension of the VecLong
 #if BUILDMODE != 0
 static inline
@@ -2300,6 +2334,54 @@ void _VecFloatSetNull3D(VecFloat3D* const that) {
   that->_val[0] = 0.0;
   that->_val[1] = 0.0;
   that->_val[2] = 0.0;
+}
+
+// Set all values of the vector 'that' to 'v'
+#if BUILDMODE != 0
+static inline
+#endif 
+void _VecFloatSetAll(VecFloat* const that, float v) {
+#if BUILDMODE == 0
+  if (that == NULL) {
+    PBMathErr->_type = PBErrTypeNullPointer;
+    sprintf(PBMathErr->_msg, "'that' is null");
+    PBErrCatch(PBMathErr);
+  }
+#endif
+  // Set values
+  for (long iDim = that->_dim; iDim--;)
+    that->_val[iDim] = v;
+}
+#if BUILDMODE != 0
+static inline
+#endif 
+void _VecFloatSetAll2D(VecFloat2D* const that, float v) {
+#if BUILDMODE == 0
+  if (that == NULL) {
+    PBMathErr->_type = PBErrTypeNullPointer;
+    sprintf(PBMathErr->_msg, "'that' is null");
+    PBErrCatch(PBMathErr);
+  }
+#endif
+  // Set values
+  that->_val[0] = v;
+  that->_val[1] = v;
+}
+#if BUILDMODE != 0
+static inline
+#endif 
+void _VecFloatSetAll3D(VecFloat3D* const that, float v) {
+#if BUILDMODE == 0
+  if (that == NULL) {
+    PBMathErr->_type = PBErrTypeNullPointer;
+    sprintf(PBMathErr->_msg, "'that' is null");
+    PBErrCatch(PBMathErr);
+  }
+#endif
+  // Set values
+  that->_val[0] = v;
+  that->_val[1] = v;
+  that->_val[2] = v;
 }
 
 // Return the dimension of the VecFloat
@@ -4274,5 +4356,69 @@ void RatioSetDenominator(Ratio* that, unsigned int v) {
   }
 #endif
   that->_denominator = v;
+}
+
+// -------------- LeastSquareLinReg
+
+// Set the component of the LeastSquareLinReg 'that' to 'X'
+#if BUILDMODE != 0 
+static inline 
+#endif 
+void LSLRSetComp(LeastSquareLinReg* that, const MatFloat* X) {
+#if BUILDMODE == 0
+  if (that == NULL) {
+    PBMathErr->_type = PBErrTypeNullPointer;
+    sprintf(PBMathErr->_msg, "'that' is null");
+    PBErrCatch(PBMathErr);
+  }
+  if (X == NULL) {
+    PBMathErr->_type = PBErrTypeNullPointer;
+    sprintf(PBMathErr->_msg, "'X' is null");
+    PBErrCatch(PBMathErr);
+  }
+#endif
+  that->X = X;
+  if (that->Xp != NULL) {
+    MatFree(&(that->Xp));
+  }
+  MatFloat* transp = MatGetTranspose(that->X);
+  MatFloat* A = MatGetProdMat(transp, that->X);
+  MatFloat* inv = MatGetInv(A);
+  if (inv != NULL) {
+    that->Xp = MatGetProdMat(inv, transp);
+  }
+  MatFree(&transp);
+  MatFree(&A);
+  MatFree(&inv);
+}
+
+// Get the bias of the last computed solution of the LeastSquareLinReg 'that'
+#if BUILDMODE != 0 
+static inline 
+#endif 
+float LSLRGetBias(const LeastSquareLinReg* that) {
+#if BUILDMODE == 0
+  if (that == NULL) {
+    PBMathErr->_type = PBErrTypeNullPointer;
+    sprintf(PBMathErr->_msg, "'that' is null");
+    PBErrCatch(PBMathErr);
+  }
+#endif
+  return that->bias;
+}
+
+// Return true if the LeastSquareLinReg 'that' is solvable
+#if BUILDMODE != 0 
+static inline 
+#endif 
+bool LSLRIsSolvable(const LeastSquareLinReg* that) {
+#if BUILDMODE == 0
+  if (that == NULL) {
+    PBMathErr->_type = PBErrTypeNullPointer;
+    sprintf(PBMathErr->_msg, "'that' is null");
+    PBErrCatch(PBMathErr);
+  }
+#endif
+  return (that->Xp != NULL);
 }
 
