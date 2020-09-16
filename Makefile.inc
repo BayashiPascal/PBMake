@@ -1827,7 +1827,7 @@ $(repo)_INC_DIR:= \
 	$(gset_INC_DIR) \
 	$(gdataset_INC_DIR) \
 	$(bcurve_INC_DIR) \
-	$(pbdataanalysis_INC_DIR)
+	$(pbdataanalysis_INC_DIR) \
 	$(pberr_INC_DIR)
 # List of object dependencies for the repo
 $(repo)_DEP_O:= \
